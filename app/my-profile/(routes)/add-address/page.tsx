@@ -12,7 +12,7 @@ export default function AddAddress() {
   const createAddress = async (e: any) => {
     e.preventDefault();
     const response = await fetch(
-      "http://localhost:4000/api/address/add-address",
+      "https://shopquest-backend.onrender.com/api/address/add-address",
       {
         method: "POST",
         headers:{
