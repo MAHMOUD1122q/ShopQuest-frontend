@@ -9,7 +9,7 @@ export default function AddColor() {
 
   const createColor = async (e: any) => {
     e.preventDefault();
-    const response = await fetch("http://localhost:4000/api/color/add-color", {
+    const response = await fetch("https://shopquest-backend.onrender.com/api/color/add-color", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
