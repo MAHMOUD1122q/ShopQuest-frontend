@@ -15,7 +15,7 @@ export default function Search() {
   const [products, setProducts] = useState([]);
   const [allData, setallData] = useState({} as any);
   const addToCart = async (getItem: any) => {
-    const response = await fetch(`http://localhost:4000/api/auth/add-to-cart`, {
+    const response = await fetch(`https://shopquest-backend.onrender.com/api/auth/add-to-cart`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -29,7 +29,7 @@ export default function Search() {
     });
     const finalData = await response.json();
     if (finalData.success) {
-      fetch("http://localhost:4000/api/auth/all-cart", {
+      fetch("https://shopquest-backend.onrender.com/api/auth/all-cart", {
         credentials: "include",
       }).then((response) => {
         response.json().then((data) => {
@@ -48,7 +48,7 @@ export default function Search() {
     }
   };
   useEffect(() => {
-    fetch(`http://localhost:4000/api/product/search?search=${search}`, {}).then(
+    fetch(`https://shopquest-backend.onrender.com/api/product/search?search=${search}`, {}).then(
       (response) => {
         response.json().then((data) => {
           setProducts(data.data);
@@ -59,7 +59,7 @@ export default function Search() {
   }, [search]);
   const addToWishList = async (getItem: any) => {
     const response = await fetch(
-      `http://localhost:4000/api/auth/add-wishlist`,
+      `https://shopquest-backend.onrender.com/api/auth/add-wishlist`,
       {
         method: "PUT",
         headers: {
@@ -73,7 +73,7 @@ export default function Search() {
     );
     const finalData = await response.json();
     if (finalData.success) {
-      fetch("http://localhost:4000/api/auth/all-wishlist", {
+      fetch("https://shopquest-backend.onrender.com/api/auth/all-wishlist", {
         credentials: "include",
       }).then((response) => {
         response.json().then((data) => {
