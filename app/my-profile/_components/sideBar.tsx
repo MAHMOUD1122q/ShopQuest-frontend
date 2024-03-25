@@ -10,7 +10,7 @@ export default function SideBar() {
     useContext(GlobalContext);
   const router = useRouter();
   const logout = async (e: any) => {
-    fetch("http://localhost:4000/api/auth/logout", {
+    fetch("https://shopquest-backend.onrender.com/api/auth/logout", {
       method: "POST",
       credentials: "include",
     }).then(() => {
