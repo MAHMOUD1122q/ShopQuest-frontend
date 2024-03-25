@@ -14,7 +14,7 @@ export default function Checkout() {
 
   const checkCoupon = async (e: any) => {
     e.preventDefault();
-    const data = await fetch(`http://localhost:4000/api/coupon/check-coupon`, {
+    const data = await fetch(`https://shopquest-backend.onrender.com/api/coupon/check-coupon`, {
       method: "PUT",
       credentials: "include",
       headers: {
@@ -41,7 +41,7 @@ export default function Checkout() {
 
   const createOrder = async (e: any) => {
     e.preventDefault();
-    const response = await fetch("http://localhost:4000/api/order/add-order", {
+    const response = await fetch("https://shopquest-backend.onrender.com/api/order/add-order", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -102,7 +102,7 @@ export default function Checkout() {
   };
 
   useEffect(() => {
-    fetch("http://localhost:4000/api/address/all-address", {
+    fetch("https://shopquest-backend.onrender.com/api/address/all-address", {
       credentials: "include",
     }).then((response) => {
       response.json().then((data) => {
