@@ -15,7 +15,7 @@ export default function ProductByCategory() {
   const { category } = useParams();
 
   const addToCart = async (getItem: any) => {
-    const response = await fetch(`http://localhost:4000/api/auth/add-to-cart`, {
+    const response = await fetch(`https://shopquest-backend.onrender.com/api/auth/add-to-cart`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -29,7 +29,7 @@ export default function ProductByCategory() {
     });
     const finalData = await response.json();
     if (finalData.success) {
-      fetch("http://localhost:4000/api/auth/all-cart", {
+      fetch("https://shopquest-backend.onrender.com/api/auth/all-cart", {
         credentials: "include",
       }).then((response) => {
         response.json().then((data) => {
@@ -49,7 +49,7 @@ export default function ProductByCategory() {
   };
   useEffect(() => {
     fetch(
-      `http://localhost:4000/api/product/product-by-category/${category}`,
+      `https://shopquest-backend.onrender.com/api/product/product-by-category/${category}`,
       {}
     ).then((response) => {
       response.json().then((data) => {
