@@ -21,7 +21,7 @@ export default function Products() {
   const [products, setProducts] = useState([]);
   const [allData, setallData] = useState({} as any);
   useEffect(() => {
-    fetch(`http://localhost:4000/api/product/all-products-admin`, {}).then(
+    fetch(`https://shopquest-backend.onrender.com/api/product/all-products-admin`, {}).then(
       (response) => {
         response.json().then((data) => {
           setProducts(data.data);
@@ -32,7 +32,7 @@ export default function Products() {
   }, []);
   const deleteProduct = async (id: any) => {
     const data = await fetch(
-      `http://localhost:4000/api/product/delete-product/${id}`,
+      `https://shopquest-backend.onrender.com/api/product/delete-product/${id}`,
       {
         method: "DELETE",
         headers: {
@@ -53,7 +53,6 @@ export default function Products() {
   };
   const router = useRouter();
   const count = allData?.ProdcutCount;
-  console.log(products);
   return (
     <>
       <title>Products</title>
