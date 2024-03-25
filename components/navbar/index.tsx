@@ -38,7 +38,7 @@ export default function Navbar() {
 
   const deleteCartItem = async (id: any) => {
     const data = await fetch(
-      `http://localhost:4000/api/auth/delete-item-cart/${id}`,
+      `https://shopquest-backend.onrender.com/api/auth/delete-item-cart/${id}`,
       {
         method: "DELETE",
         credentials: "include",
@@ -49,7 +49,7 @@ export default function Navbar() {
     );
     const finalData = await data.json();
     if (finalData.success) {
-      fetch("http://localhost:4000/api/auth/all-cart", {
+      fetch("https://shopquest-backend.onrender.com/api/auth/all-cart", {
         credentials: "include",
       }).then((response) => {
         response.json().then((data) => {
@@ -64,7 +64,7 @@ export default function Navbar() {
   };
 
   useEffect(() => {
-    fetch("http://localhost:4000/api/auth/all-cart", {
+    fetch("https://shopquest-backend.onrender.com/api/auth/all-cart", {
       credentials: "include",
     }).then((response) => {
       response.json().then((data) => {
@@ -74,7 +74,7 @@ export default function Navbar() {
   }, [setCartItems]);
 
   useEffect(() => {
-    fetch("http://localhost:4000/api/auth/all-wishlist", {
+    fetch("https://shopquest-backend.onrender.com/api/auth/all-wishlist", {
       credentials: "include",
     }).then((response) => {
       response.json().then((data) => {
@@ -84,7 +84,7 @@ export default function Navbar() {
   }, [setWishlist]);
 
   useEffect(() => {
-    fetch("http://localhost:4000/api/auth/profile", {
+    fetch("https://shopquest-backend.onrender.com/api/auth/profile", {
       credentials: "include",
     })
       .then((response) => {
@@ -102,7 +102,7 @@ export default function Navbar() {
   }, []);
 
   const logout = async (e: any) => {
-    fetch("http://localhost:4000/api/auth/logout", {
+    fetch("https://shopquest-backend.onrender.com/api/auth/logout", {
       method: "POST",
       credentials: "include",
     }).then(() => {
@@ -114,7 +114,6 @@ export default function Navbar() {
     });
   };
 
-  console.log(cartItems);
   const cartItemsCount = cartItems.count;
   const auth = isAuthUser?.email;
   const admin = isAuthUser?.role === "admin";
