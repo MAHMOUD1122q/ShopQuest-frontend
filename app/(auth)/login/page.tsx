@@ -17,7 +17,7 @@ export default function Login() {
     useContext(GlobalContext);
   const login = async (e: any) => {
     e.preventDefault();
-    const response = await fetch("http://localhost:4000/api/auth/login",{
+    const response = await fetch("https://shopquest-backend.onrender.com/api/auth/login",{
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -30,14 +30,14 @@ export default function Login() {
     })
     const finalData = await response.json();
     if (finalData.success) {
-      fetch("http://localhost:4000/api/auth/all-cart", {
+      fetch("https://shopquest-backend.onrender.com/api/auth/all-cart", {
         credentials: "include",
       }).then((response) => {
         response.json().then((data) => {
           setCartItems(data);
         });
       });
-      fetch("http://localhost:4000/api/auth/all-wishlist", {
+      fetch("https://shopquest-backend.onrender.com/api/auth/all-wishlist", {
         credentials: "include",
       }).then((response) => {
         response.json().then((data) => {
