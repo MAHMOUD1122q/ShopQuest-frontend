@@ -85,8 +85,6 @@ export default function Navbar() {
 
   useEffect(() => {
     fetch("https://shopquest-backend.onrender.com/api/auth/profile", {
-      method: "GET",
-      credentials: "include",
     })
       .then((response) => {
         response.json().then((data) => {
