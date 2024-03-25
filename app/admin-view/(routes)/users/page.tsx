@@ -17,7 +17,7 @@ export default function Users() {
   const [users, setUsers] = useState([]);
   const [allData, setallData] = useState({} as any);
   useEffect(() => {
-    fetch(`http://localhost:4000/api/auth/all-users`, {}).then((response) => {
+    fetch(`https://shopquest-backend.onrender.com/api/auth/all-users`, {}).then((response) => {
       response.json().then((data) => {
         setUsers(data.data);
         setallData(data);
