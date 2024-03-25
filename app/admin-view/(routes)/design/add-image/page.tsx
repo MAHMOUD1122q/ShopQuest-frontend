@@ -16,7 +16,7 @@ export default function AddImage() {
     formData.append("image",image);
     formData.append("link",link);
     const response = await fetch(
-      "http://localhost:4000/api/slider/add-slider",
+      "https://shopquest-backend.onrender.com/api/slider/add-slider",
       {
         method: "POST",
         body: formData
