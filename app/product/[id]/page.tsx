@@ -42,7 +42,7 @@ export default function ProductPage() {
   const { id } = useParams();
 
   const addToCart = async (getItem: any) => {
-    const response = await fetch(`http://localhost:4000/api/auth/add-to-cart`, {
+    const response = await fetch(`https://shopquest-backend.onrender.com/api/auth/add-to-cart`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -56,7 +56,7 @@ export default function ProductPage() {
     });
     const finalData = await response.json();
     if (finalData.success) {
-      fetch("http://localhost:4000/api/auth/all-cart", {
+      fetch("https://shopquest-backend.onrender.com/api/auth/all-cart", {
         credentials: "include",
       }).then((response) => {
         response.json().then((data) => {
@@ -76,7 +76,7 @@ export default function ProductPage() {
     }
   };
   const addToCartAlsoProduct = async (getItem: any) => {
-    const response = await fetch(`http://localhost:4000/api/auth/add-to-cart`, {
+    const response = await fetch(`https://shopquest-backend.onrender.com/api/auth/add-to-cart`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -90,7 +90,7 @@ export default function ProductPage() {
     });
     const finalData = await response.json();
     if (finalData.success) {
-      fetch("http://localhost:4000/api/auth/all-cart", {
+      fetch("https://shopquest-backend.onrender.com/api/auth/all-cart", {
         credentials: "include",
       }).then((response) => {
         response.json().then((data) => {
@@ -109,7 +109,7 @@ export default function ProductPage() {
     }
   };
   useEffect(() => {
-    fetch(`http://localhost:4000/api/product/all-products`, {}).then(
+    fetch(`https://shopquest-backend.onrender.com/api/product/all-products`, {}).then(
       (response) => {
         response.json().then((data) => {
           setProductsData(data.data);
@@ -119,7 +119,7 @@ export default function ProductPage() {
   }, []);
 
   useEffect(() => {
-    fetch(`http://localhost:4000/api/product/single-product?id=${id}`, {}).then(
+    fetch(`https://shopquest-backend.onrender.com/api/product/single-product?id=${id}`, {}).then(
       (response) => {
         response.json().then((data) => {
           setProduct(data.data);
@@ -130,7 +130,7 @@ export default function ProductPage() {
   const createReview = async (e: any) => {
     e.preventDefault();
     const response = await fetch(
-      `http://localhost:4000/api/product/${id}/review`,
+      `https://shopquest-backend.onrender.com/api/product/${id}/review`,
       {
         method: "PUT",
         headers: {
@@ -162,7 +162,7 @@ export default function ProductPage() {
 
   const addToWishList = async (getItem: any) => {
     const response = await fetch(
-      `http://localhost:4000/api/auth/add-wishlist`,
+      `https://shopquest-backend.onrender.com/api/auth/add-wishlist`,
       {
         method: "PUT",
         headers: {
@@ -176,7 +176,7 @@ export default function ProductPage() {
     );
     const finalData = await response.json();
     if (finalData.success) {
-      fetch("http://localhost:4000/api/auth/all-wishlist", {
+      fetch("https://shopquest-backend.onrender.com/api/auth/all-wishlist", {
         credentials: "include",
       }).then((response) => {
         response.json().then((data) => {
