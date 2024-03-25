@@ -9,7 +9,7 @@ export default function MyAddress() {
   const router = useRouter();
 
   useEffect(() => {
-    fetch("http://localhost:4000/api/address/all-address", {
+    fetch("https://shopquest-backend.onrender.com/api/address/all-address", {
       credentials: "include",
     }).then((response) => {
       response.json().then((data) => {
@@ -20,7 +20,7 @@ export default function MyAddress() {
 
   const deleteAddress = async (id: any) => {
     const data = await fetch(
-      `http://localhost:4000/api/address/delete-address/${id}`,
+      `https://shopquest-backend.onrender.com/api/address/delete-address/${id}`,
       {
         method: "DELETE",
         headers: {
