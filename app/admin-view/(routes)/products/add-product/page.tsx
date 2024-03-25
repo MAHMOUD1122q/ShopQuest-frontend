@@ -48,7 +48,7 @@ export default function Product() {
   const [categorysData, setCategorysData] = useState([]);
 
   useEffect(() => {
-    fetch(`http://localhost:4000/api/category/all-category`, {}).then(
+    fetch(`https://shopquest-backend.onrender.com/api/category/all-category`, {}).then(
       (response) => {
         response.json().then((data) => {
           setCategorysData(data.data);
@@ -59,7 +59,7 @@ export default function Product() {
   const [colorsData, setColorsData] = useState([]);
 
   useEffect(() => {
-    fetch(`http://localhost:4000/api/color/all-color`, {}).then((response) => {
+    fetch(`https://shopquest-backend.onrender.com/api/color/all-color`, {}).then((response) => {
       response.json().then((data) => {
         setColorsData(data.data);
       });
@@ -68,7 +68,7 @@ export default function Product() {
   const [sizesData, setSizesData] = useState([]);
 
   useEffect(() => {
-    fetch(`http://localhost:4000/api/size/all-size`, {}).then((response) => {
+    fetch(`https://shopquest-backend.onrender.com/api/size/all-size`, {}).then((response) => {
       response.json().then((data) => {
         setSizesData(data.data);
       });
@@ -111,7 +111,7 @@ export default function Product() {
       fd.append("images", images[x]);
     }
     const response = await fetch(
-      "http://localhost:4000/api/product/add-product",
+      "https://shopquest-backend.onrender.com/api/product/add-product",
       {
         method: "POST",
         body: fd,
