@@ -20,7 +20,7 @@ export default function Categorys() {
   const [allData, setallData] = useState({} as any);
 
   useEffect(() => {
-    fetch(`http://localhost:4000/api/category/all-category`, {}).then(
+    fetch(`https://shopquest-backend.onrender.com/api/category/all-category`, {}).then(
       (response) => {
         response.json().then((data) => {
           setCategorys(data.data);
@@ -31,7 +31,7 @@ export default function Categorys() {
   }, []);
   const deleteCategory = async (id: any) => {
     const data = await fetch(
-      `http://localhost:4000/api/category/delete-category/${id}`,
+      `https://shopquest-backend.onrender.com/api/category/delete-category/${id}`,
       {
         method: "DELETE",
         headers: {
