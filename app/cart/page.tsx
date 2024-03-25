@@ -10,7 +10,7 @@ export default function Cart() {
   const router = useRouter();
   const incrementCartItem = async (id: any) => {
     const data = await fetch(
-      `http://localhost:4000/api/auth/increment-item-cart/${id}`,
+      `https://shopquest-backend.onrender.com/api/auth/increment-item-cart/${id}`,
       {
         method: "PUT",
         credentials: "include",
@@ -21,7 +21,7 @@ export default function Cart() {
     );
     const finalData = await data.json();
     if (finalData.success) {
-      fetch("http://localhost:4000/api/auth/all-cart", {
+      fetch("https://shopquest-backend.onrender.com/api/auth/all-cart", {
         credentials: "include",
       }).then((response) => {
         response.json().then((data) => {
@@ -32,7 +32,7 @@ export default function Cart() {
   };
   const decrementCartItem = async (id: any) => {
     const data = await fetch(
-      `http://localhost:4000/api/auth/dencrement-item-cart/${id}`,
+      `https://shopquest-backend.onrender.com/api/auth/dencrement-item-cart/${id}`,
       {
         method: "PUT",
         credentials: "include",
@@ -43,7 +43,7 @@ export default function Cart() {
     );
     const finalData = await data.json();
     if (finalData.success) {
-      fetch("http://localhost:4000/api/auth/all-cart", {
+      fetch("https://shopquest-backend.onrender.com/api/auth/all-cart", {
         credentials: "include",
       }).then((response) => {
         response.json().then((data) => {
@@ -56,7 +56,7 @@ export default function Cart() {
 
   const deleteCartItem = async (id: any) => {
     const data = await fetch(
-      `http://localhost:4000/api/auth/delete-item-cart/${id}`,
+      `https://shopquest-backend.onrender.com/api/auth/delete-item-cart/${id}`,
       {
         method: "DELETE",
         credentials: "include",
@@ -67,7 +67,7 @@ export default function Cart() {
     );
     const finalData = await data.json();
     if (finalData.success) {
-      fetch("http://localhost:4000/api/auth/all-cart", {
+      fetch("https://shopquest-backend.onrender.com/api/auth/all-cart", {
         credentials: "include",
       }).then((response) => {
         response.json().then((data) => {
