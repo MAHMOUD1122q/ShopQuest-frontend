@@ -9,7 +9,7 @@ export default function AddSize() {
 
   const createSize = async (e: any) => {
     e.preventDefault();
-    const response = await fetch("http://localhost:4000/api/size/add-size", {
+    const response = await fetch("https://shopquest-backend.onrender.com/api/size/add-size", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
