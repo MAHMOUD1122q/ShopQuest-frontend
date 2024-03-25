@@ -19,7 +19,7 @@ export default function Colors() {
   const [allData, setallData] = useState({} as any);
 
   useEffect(() => {
-    fetch(`http://localhost:4000/api/color/all-color`, {}).then((response) => {
+    fetch(`https://shopquest-backend.onrender.com/api/color/all-color`, {}).then((response) => {
       response.json().then((data) => {
         setColors(data.data);
         setallData(data);
@@ -28,7 +28,7 @@ export default function Colors() {
   }, []);
   const deleteColor = async (id: any) => {
     const data = await fetch(
-      `http://localhost:4000/api/color/delete-color/${id}`,
+      `https://shopquest-backend.onrender.com/api/color/delete-color/${id}`,
       {
         method: "DELETE",
         headers: {
