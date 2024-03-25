@@ -20,7 +20,7 @@ export default function Design() {
   const [allData, setallData] = useState({} as any);
 
   useEffect(() => {
-    fetch(`http://localhost:4000/api/slider/all-slider`, {}).then(
+    fetch(`https://shopquest-backend.onrender.com/api/slider/all-slider`, {}).then(
       (response) => {
         response.json().then((data) => {
           setSliders(data.data);
@@ -31,7 +31,7 @@ export default function Design() {
   }, []);
   const deleteSlider = async (id: any) => {
     const data = await fetch(
-      `http://localhost:4000/api/slider/delete-slider/${id}`,
+      `https://shopquest-backend.onrender.com/api/slider/delete-slider/${id}`,
       {
         method: "DELETE",
         headers: {
