@@ -26,7 +26,7 @@ export default function MyOrder() {
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:4000/api/order/all-order", {
+    fetch("https://shopquest-backend.onrender.com/api/order/all-order", {
       credentials: "include",
     }).then((response) => {
       response.json().then((data) => {
