@@ -19,7 +19,7 @@ export default function Sizes() {
   const [allData, setallData] = useState({} as any);
 
   useEffect(() => {
-    fetch(`http://localhost:4000/api/size/all-size`, {}).then((response) => {
+    fetch(`https://shopquest-backend.onrender.com/api/size/all-size`, {}).then((response) => {
       response.json().then((data) => {
         setSizes(data.data);
         setallData(data);
@@ -28,7 +28,7 @@ export default function Sizes() {
   }, []);
   const deleteSize = async (id: any) => {
     const data = await fetch(
-      `http://localhost:4000/api/size/delete-size/${id}`,
+      `https://shopquest-backend.onrender.com/api/size/delete-size/${id}`,
       {
         method: "DELETE",
         headers: {
