@@ -29,7 +29,7 @@ export default function Orders() {
   const [allData, setallData] = useState({} as any);
 
   useEffect(() => {
-    fetch(`http://localhost:4000/api/order/all-order-admin`, {
+    fetch(`https://shopquest-backend.onrender.com/api/order/all-order-admin`, {
       credentials: "include",
     }).then((response) => {
       response.json().then((data) => {
@@ -37,7 +37,6 @@ export default function Orders() {
       });
     });
   }, []);
-  console.log(orders);
   const router = useRouter();
   return (
     <>
