@@ -15,7 +15,7 @@ export default function Register() {
 
   const register = async (e:any)=> {
     e.preventDefault();
-    const data = await fetch("http://localhost:4000/api/auth/register",{
+    const data = await fetch("https://shopquest-backend.onrender.com/api/auth/register",{
       method: "POST",
       headers:{
         "Content-Type": "application/json",
