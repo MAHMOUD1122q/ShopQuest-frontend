@@ -12,7 +12,7 @@ export default function AddCoupon() {
   const createCoupon = async (e: any) => {
     e.preventDefault();
     const response = await fetch(
-      "http://localhost:4000/api/coupon/add-coupon",
+      "https://shopquest-backend.onrender.com/api/coupon/add-coupon",
       {
         method: "POST",
         headers:{
