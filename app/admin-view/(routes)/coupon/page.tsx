@@ -18,7 +18,7 @@ export default function Coupon() {
   const [allData, setallData] = useState({} as any);
 
   useEffect(() => {
-    fetch(`http://localhost:4000/api/coupon/all-coupon`, {}).then(
+    fetch(`https://shopquest-backend.onrender.com/api/coupon/all-coupon`, {}).then(
       (response) => {
         response.json().then((data) => {
           setCoupons(data.data);
