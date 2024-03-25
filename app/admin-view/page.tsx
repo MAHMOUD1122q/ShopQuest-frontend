@@ -8,7 +8,7 @@ export default function AdminView() {
   const [allOrderData, setAllOrderData] = useState({} as any);
 
   useEffect(() => {
-    fetch(`http://localhost:4000/api/order/all-order-admin`, {
+    fetch(`https://shopquest-backend.onrender.com/api/order/all-order-admin`, {
       credentials: "include",
     }).then((response) => {
       response.json().then((data) => {
@@ -19,14 +19,14 @@ export default function AdminView() {
   }, []);
 
   useEffect(() => {
-    fetch(`http://localhost:4000/api/auth/all-users`, {}).then((response) => {
+    fetch(`https://shopquest-backend.onrender.com/api/auth/all-users`, {}).then((response) => {
       response.json().then((data) => {
         setUsersData(data);
       });
     });
   }, []);
   useEffect(() => {
-    fetch(`http://localhost:4000/api/product/all-products`, {}).then(
+    fetch(`https://shopquest-backend.onrender.com/api/product/all-products`, {}).then(
       (response) => {
         response.json().then((data) => {
           setProducstData(data);
