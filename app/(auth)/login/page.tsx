@@ -8,7 +8,6 @@ import {useRouter} from "next/navigation";
 import { toast } from "@/components/ui/use-toast";
 import { GlobalContext } from "@/context";
 
-
 export default function Login() {
   const router = useRouter();
   const [email, setEmail] = useState("");
@@ -41,7 +40,7 @@ export default function Login() {
         credentials: "include",
       }).then((response) => {
         response.json().then((data) => {
-          setWishlist(data.wishlist);
+          setWishlist(data.data.wishlist);
         });
       });
       toast({
