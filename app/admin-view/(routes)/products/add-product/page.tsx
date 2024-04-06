@@ -48,18 +48,22 @@ export default function Product() {
   const [categorysData, setCategorysData] = useState([]);
 
   useEffect(() => {
-    fetch(`https://shopquest-backend.onrender.com/api/category/all-category`, {}).then(
-      (response) => {
-        response.json().then((data) => {
-          setCategorysData(data.data);
-        });
-      }
-    );
+    fetch(
+      `https://shopquest-backend.onrender.com/api/category/all-category`,
+      {}
+    ).then((response) => {
+      response.json().then((data) => {
+        setCategorysData(data.data);
+      });
+    });
   }, []);
   const [colorsData, setColorsData] = useState([]);
 
   useEffect(() => {
-    fetch(`https://shopquest-backend.onrender.com/api/color/all-color`, {}).then((response) => {
+    fetch(
+      `https://shopquest-backend.onrender.com/api/color/all-color`,
+      {}
+    ).then((response) => {
       response.json().then((data) => {
         setColorsData(data.data);
       });
@@ -68,11 +72,13 @@ export default function Product() {
   const [sizesData, setSizesData] = useState([]);
 
   useEffect(() => {
-    fetch(`https://shopquest-backend.onrender.com/api/size/all-size`, {}).then((response) => {
-      response.json().then((data) => {
-        setSizesData(data.data);
-      });
-    });
+    fetch(`https://shopquest-backend.onrender.com/api/size/all-size`, {}).then(
+      (response) => {
+        response.json().then((data) => {
+          setSizesData(data.data);
+        });
+      }
+    );
   }, []);
 
   useEffect(() => {
@@ -277,7 +283,7 @@ export default function Product() {
                 <label htmlFor="price"> Status</label>
                 <Select onValueChange={(e: any) => setStatus(e)}>
                   <SelectTrigger className="w-full mb-5">
-                    <SelectValue placeholder="select status"/>
+                    <SelectValue placeholder="select status" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="Sold">Sold</SelectItem>

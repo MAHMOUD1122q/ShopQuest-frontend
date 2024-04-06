@@ -20,14 +20,15 @@ export default function Design() {
   const [allData, setallData] = useState({} as any);
 
   useEffect(() => {
-    fetch(`https://shopquest-backend.onrender.com/api/slider/all-slider`, {}).then(
-      (response) => {
-        response.json().then((data) => {
-          setSliders(data.data);
-          setallData(data);
-        });
-      }
-    );
+    fetch(
+      `https://shopquest-backend.onrender.com/api/slider/all-slider`,
+      {}
+    ).then((response) => {
+      response.json().then((data) => {
+        setSliders(data.data);
+        setallData(data);
+      });
+    });
   }, []);
   const deleteSlider = async (id: any) => {
     const data = await fetch(
@@ -49,7 +50,7 @@ export default function Design() {
         history.go(0);
       }, 2000);
     }
-  }
+  };
   const count = allData?.sliderCount;
 
   const router = useRouter();

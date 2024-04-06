@@ -14,16 +14,19 @@ export default function Checkout() {
 
   const checkCoupon = async (e: any) => {
     e.preventDefault();
-    const data = await fetch(`https://shopquest-backend.onrender.com/api/coupon/check-coupon`, {
-      method: "PUT",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name: coupon,
-      }),
-    });
+    const data = await fetch(
+      `https://shopquest-backend.onrender.com/api/coupon/check-coupon`,
+      {
+        method: "PUT",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: coupon,
+        }),
+      }
+    );
     const finalData = await data.json();
     if (finalData.success) {
       setDiscountData(finalData.discount);
@@ -41,49 +44,52 @@ export default function Checkout() {
 
   const createOrder = async (e: any) => {
     e.preventDefault();
-    const response = await fetch("https://shopquest-backend.onrender.com/api/order/add-order", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify({
-        shippingAddress: {
-          fullName: selecting.fullName,
-          address: selecting.address,
-          mobile: selecting.mobile,
-          anotherMobile: selecting.anotherMobile,
-          country: selecting.country,
+    const response = await fetch(
+      "https://shopquest-backend.onrender.com/api/order/add-order",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-        orderItems: cartItems.data.map((item: any) => ({
-          qty: item.quantity,
-          productId: item.productID,
-          productImage: item.productID.images[0],
-          productName: item.productID.name,
-          productPrice:
-            item.productID.isSale === true
-              ? item.productID.price - item.productID.discount
-              : item.productID.price,
-          color: item.color,
-          size: item.size,
-        })),
-        totalPrice:
-          cartItems.data.reduce(
-            (total: any, item: any) =>
+        credentials: "include",
+        body: JSON.stringify({
+          shippingAddress: {
+            fullName: selecting.fullName,
+            address: selecting.address,
+            mobile: selecting.mobile,
+            anotherMobile: selecting.anotherMobile,
+            country: selecting.country,
+          },
+          orderItems: cartItems.data.map((item: any) => ({
+            qty: item.quantity,
+            productId: item.productID,
+            productImage: item.productID.images[0],
+            productName: item.productID.name,
+            productPrice:
               item.productID.isSale === true
-                ? (item.productID.price - item.productID.discount) *
-                    item.quantity +
-                  total
-                : item.productID.price + total,
-            0
-          ) -
-          (discountData === undefined
-            ? 0
-            : discountData === 0
-            ? 0
-            : discountData),
-      }),
-    });
+                ? item.productID.price - item.productID.discount
+                : item.productID.price,
+            color: item.color,
+            size: item.size,
+          })),
+          totalPrice:
+            cartItems.data.reduce(
+              (total: any, item: any) =>
+                item.productID.isSale === true
+                  ? (item.productID.price - item.productID.discount) *
+                      item.quantity +
+                    total
+                  : item.productID.price + total,
+              0
+            ) -
+            (discountData === undefined
+              ? 0
+              : discountData === 0
+              ? 0
+              : discountData),
+        }),
+      }
+    );
     const finalData = await response.json();
     if (finalData.success) {
       toast({
@@ -235,9 +241,7 @@ export default function Checkout() {
           </div>
           <div className=" flex justify-between mt-5">
             <p>shapping : </p>
-            <p>
-              0 EGB
-            </p>
+            <p>0 EGB</p>
           </div>
           <div className=" my-3">
             <form onSubmit={checkCoupon}>
@@ -284,14 +288,14 @@ export default function Checkout() {
           </div>
           <form onSubmit={createOrder}>
             <button
-             className=" w-full bg-sky-600 py-2 disabled:opacity-65 disabled:pointer-events-none text-white mt-4 hover:bg-sky-700 duration-300 rounded-xl"
-             disabled ={selecting === "" ? true : false }
-             >
+              className=" w-full bg-sky-600 py-2 disabled:opacity-65 disabled:pointer-events-none text-white mt-4 hover:bg-sky-700 duration-300 rounded-xl"
+              disabled={selecting === "" ? true : false}
+            >
               checkout
             </button>
-            {
-              selecting === '' ? <span className=" text-red-600"> must choose address</span> : null
-            }
+            {selecting === "" ? (
+              <span className=" text-red-600"> must choose address</span>
+            ) : null}
           </form>
         </div>
       </div>

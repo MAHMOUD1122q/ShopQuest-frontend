@@ -19,12 +19,14 @@ export default function Sizes() {
   const [allData, setallData] = useState({} as any);
 
   useEffect(() => {
-    fetch(`https://shopquest-backend.onrender.com/api/size/all-size`, {}).then((response) => {
-      response.json().then((data) => {
-        setSizes(data.data);
-        setallData(data);
-      });
-    });
+    fetch(`https://shopquest-backend.onrender.com/api/size/all-size`, {}).then(
+      (response) => {
+        response.json().then((data) => {
+          setSizes(data.data);
+          setallData(data);
+        });
+      }
+    );
   }, []);
   const deleteSize = async (id: any) => {
     const data = await fetch(
@@ -46,7 +48,7 @@ export default function Sizes() {
         history.go(0);
       }, 2000);
     }
-  }
+  };
   const count = allData?.SizeCount;
 
   const router = useRouter();
@@ -90,7 +92,6 @@ export default function Sizes() {
                         fillOpacity="0.3"
                         className=" text-red-700 h-7 w-7 bg-white border-[1px] p-[5px] cursor-pointer"
                         onClick={() => deleteSize(size._id)}
-                      
                       />
                     </div>
                   </TableCell>

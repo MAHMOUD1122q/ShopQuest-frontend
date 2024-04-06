@@ -17,12 +17,14 @@ export default function Users() {
   const [users, setUsers] = useState([]);
   const [allData, setallData] = useState({} as any);
   useEffect(() => {
-    fetch(`https://shopquest-backend.onrender.com/api/auth/all-users`, {}).then((response) => {
-      response.json().then((data) => {
-        setUsers(data.data);
-        setallData(data);
-      });
-    });
+    fetch(`https://shopquest-backend.onrender.com/api/auth/all-users`, {}).then(
+      (response) => {
+        response.json().then((data) => {
+          setUsers(data.data);
+          setallData(data);
+        });
+      }
+    );
   }, []);
   const router = useRouter();
   const count = allData?.userCount;

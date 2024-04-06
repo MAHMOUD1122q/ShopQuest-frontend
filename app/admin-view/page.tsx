@@ -19,20 +19,23 @@ export default function AdminView() {
   }, []);
 
   useEffect(() => {
-    fetch(`https://shopquest-backend.onrender.com/api/auth/all-users`, {}).then((response) => {
-      response.json().then((data) => {
-        setUsersData(data);
-      });
-    });
-  }, []);
-  useEffect(() => {
-    fetch(`https://shopquest-backend.onrender.com/api/product/all-products`, {}).then(
+    fetch(`https://shopquest-backend.onrender.com/api/auth/all-users`, {}).then(
       (response) => {
         response.json().then((data) => {
-          setProducstData(data);
+          setUsersData(data);
         });
       }
     );
+  }, []);
+  useEffect(() => {
+    fetch(
+      `https://shopquest-backend.onrender.com/api/product/all-products`,
+      {}
+    ).then((response) => {
+      response.json().then((data) => {
+        setProducstData(data);
+      });
+    });
   }, []);
   const usersCount = usersData?.userCount;
   const productsCount = producstData?.ProdcutCount;

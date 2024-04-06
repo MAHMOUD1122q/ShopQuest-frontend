@@ -15,18 +15,18 @@ export default function AddAddress() {
       "https://shopquest-backend.onrender.com/api/address/add-address",
       {
         method: "POST",
-        headers:{
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-          body:JSON.stringify({
-            address,
-            mobile,
-            country,
-            anotherMobile,
-            fullName
-          })
-        }
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          address,
+          mobile,
+          country,
+          anotherMobile,
+          fullName,
+        }),
+      }
     );
     const finalData = await response.json();
     if (finalData.success) {

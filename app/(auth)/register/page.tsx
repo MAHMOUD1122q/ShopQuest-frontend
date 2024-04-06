@@ -7,40 +7,42 @@ import { useState } from "react";
 import { toast } from "@/components/ui/use-toast";
 
 export default function Register() {
-  const [username,setUsername] = useState("")
-  const [email,setEmail] = useState("")
-  const [password,setPassword] = useState("")
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const pathname = usePathname();
   const router = useRouter();
 
-  const register = async (e:any)=> {
+  const register = async (e: any) => {
     e.preventDefault();
-    const data = await fetch("https://shopquest-backend.onrender.com/api/auth/register",{
-      method: "POST",
-      headers:{
-        "Content-Type": "application/json",
-      },
-      body:JSON.stringify({
-        username,
-        email,
-        password
-      })
-    })
+    const data = await fetch(
+      "https://shopquest-backend.onrender.com/api/auth/register",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username,
+          email,
+          password,
+        }),
+      }
+    );
     const finalData = await data.json();
     if (finalData.success) {
       toast({
-        variant:"success",
+        variant: "success",
         title: finalData.message,
-      })
-      router.push("/login")
-    }
-    else {
+      });
+      router.push("/login");
+    } else {
       toast({
-        variant:"destructive",
+        variant: "destructive",
         title: finalData.message,
-      })
+      });
     }
-  }
+  };
 
   return (
     <>
@@ -51,14 +53,12 @@ export default function Register() {
             <button
               className={`px-16 py-2 bg-sky-600 mr-2 text-white duration-300 border-[1px]`}
             >
-              
               Register
             </button>
             <button
               className=" px-[54px] py-2 bg-gray-100 hover:bg-sky-600 hover:text-white duration-300 border-[1px]"
               onClick={() => router.push("/login")}
             >
-              
               Login
             </button>
           </div>
@@ -116,7 +116,6 @@ export default function Register() {
             onClick={() => router.push("/")}
             className=" mt-4 block text-[#185a9d]"
           >
-            
             Don&apos;t have an account
           </a>
           <a

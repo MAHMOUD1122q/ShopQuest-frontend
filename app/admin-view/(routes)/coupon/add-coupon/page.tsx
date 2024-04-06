@@ -15,15 +15,16 @@ export default function AddCoupon() {
       "https://shopquest-backend.onrender.com/api/coupon/add-coupon",
       {
         method: "POST",
-        headers:{
+        headers: {
           "Content-Type": "application/json",
         },
-        body:JSON.stringify({
+        body: JSON.stringify({
           name,
           expiry,
-          discount
-        })
-      })
+          discount,
+        }),
+      }
+    );
     const finalData = await response.json();
     if (finalData.success) {
       toast({

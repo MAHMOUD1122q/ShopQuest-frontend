@@ -37,6 +37,7 @@ export default function Orders() {
       });
     });
   }, []);
+  console.log(orders);
   const router = useRouter();
   return (
     <>

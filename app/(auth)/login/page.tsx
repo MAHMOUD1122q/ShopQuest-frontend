@@ -2,9 +2,9 @@
 
 import Image from "next/image";
 import { User, Key } from "lucide-react";
-import {useState,useContext } from "react";
+import { useState, useContext } from "react";
 
-import {useRouter} from "next/navigation";
+import { useRouter } from "next/navigation";
 import { toast } from "@/components/ui/use-toast";
 import { GlobalContext } from "@/context";
 
@@ -12,21 +12,25 @@ export default function Login() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { setIsAuthUser, setCartItems ,setWishlist } =
+  const { setIsAuthUser, setCartItems, setWishlist } =
     useContext(GlobalContext);
+
   const login = async (e: any) => {
     e.preventDefault();
-    const response = await fetch("https://shopquest-backend.onrender.com/api/auth/login",{
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials:"include",
-      body: JSON.stringify({
-        email,
-        password,
-      }),
-    })
+    const response = await fetch(
+      "https://shopquest-backend.onrender.com/api/auth/login",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      }
+    );
     const finalData = await response.json();
     if (finalData.success) {
       fetch("https://shopquest-backend.onrender.com/api/auth/all-cart", {
@@ -40,21 +44,20 @@ export default function Login() {
         credentials: "include",
       }).then((response) => {
         response.json().then((data) => {
-          setWishlist(data.data.wishlist);
+          setWishlist(data.wishlist);
         });
       });
       toast({
-        variant:"success",
+        variant: "success",
         title: finalData.message,
-      })
+      });
       setIsAuthUser(finalData);
-      router.push("/")
-    }
-    else {
+      router.push("/");
+    } else {
       toast({
-        variant:"destructive",
+        variant: "destructive",
         title: finalData.message,
-      })
+      });
     }
   };
   return (
@@ -62,7 +65,7 @@ export default function Login() {
       <title> Login </title>
       <div className="flex pt-44 pb-20 mx-4 md:mx-64">
         <div className={` duration-700 `}>
-        <p className=" text-gray-600 text-center my-2 text-lg">
+          <p className=" text-gray-600 text-center my-2 text-lg">
             welcome back
           </p>
           <div className="flex">

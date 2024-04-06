@@ -8,18 +8,18 @@ import { useState, useEffect } from "react";
 export default function AddImage() {
   const [link, setLink] = useState("");
   const [image, setImage] = useState("");
-  const [imagesPreview, setImagesPreview] = useState('');
+  const [imagesPreview, setImagesPreview] = useState("");
 
   const createSlider = async (e: any) => {
     e.preventDefault();
     const formData = new FormData();
-    formData.append("image",image);
-    formData.append("link",link);
+    formData.append("image", image);
+    formData.append("link", link);
     const response = await fetch(
       "https://shopquest-backend.onrender.com/api/slider/add-slider",
       {
         method: "POST",
-        body: formData
+        body: formData,
       }
     );
     const finalData = await response.json();
@@ -102,15 +102,15 @@ export default function AddImage() {
                   />
                 </label>
                 <div className=" flex">
-                    <>
-                      <Image
-                        src={imagesPreview}
-                        alt="Preview"
-                        width={96}
-                        height={96}
-                        className="w-24 h-24 border-[1px] p-1 rounded-md mt-3"
-                      />
-                    </>
+                  <>
+                    <Image
+                      src={imagesPreview}
+                      alt="Preview"
+                      width={96}
+                      height={96}
+                      className="w-24 h-24 border-[1px] p-1 rounded-md mt-3"
+                    />
+                  </>
                 </div>
               </div>
             </div>

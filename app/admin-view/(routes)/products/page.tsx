@@ -21,14 +21,15 @@ export default function Products() {
   const [products, setProducts] = useState([]);
   const [allData, setallData] = useState({} as any);
   useEffect(() => {
-    fetch(`https://shopquest-backend.onrender.com/api/product/all-products-admin`, {}).then(
-      (response) => {
-        response.json().then((data) => {
-          setProducts(data.data);
-          setallData(data);
-        });
-      }
-    );
+    fetch(
+      `https://shopquest-backend.onrender.com/api/product/all-products-admin`,
+      {}
+    ).then((response) => {
+      response.json().then((data) => {
+        setProducts(data.data);
+        setallData(data);
+      });
+    });
   }, []);
   const deleteProduct = async (id: any) => {
     const data = await fetch(
@@ -53,6 +54,7 @@ export default function Products() {
   };
   const router = useRouter();
   const count = allData?.ProdcutCount;
+  console.log(products);
   return (
     <>
       <title>Products</title>
@@ -107,7 +109,9 @@ export default function Products() {
                   <TableCell>
                     {product.isShow === false ? "do not show" : "show"}
                   </TableCell>
-                  <TableCell>{product.isSale === false ? "not sale" : "sale"}</TableCell>
+                  <TableCell>
+                    {product.isSale === false ? "not sale" : "sale"}
+                  </TableCell>
                   <TableCell>{product.discount}</TableCell>
                   <TableCell className="text-right">
                     {" "}

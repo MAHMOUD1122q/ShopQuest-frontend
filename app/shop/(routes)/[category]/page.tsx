@@ -15,18 +15,21 @@ export default function ProductByCategory() {
   const { category } = useParams();
 
   const addToCart = async (getItem: any) => {
-    const response = await fetch(`https://shopquest-backend.onrender.com/api/auth/add-to-cart`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify({
-        productID: getItem._id,
-        color: getItem.color[0],
-        size: getItem.sizes[0],
-      }),
-    });
+    const response = await fetch(
+      `https://shopquest-backend.onrender.com/api/auth/add-to-cart`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          productID: getItem._id,
+          color: getItem.color[0],
+          size: getItem.sizes[0],
+        }),
+      }
+    );
     const finalData = await response.json();
     if (finalData.success) {
       fetch("https://shopquest-backend.onrender.com/api/auth/all-cart", {

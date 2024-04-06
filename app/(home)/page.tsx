@@ -34,32 +34,35 @@ export default function Home() {
   };
 
   useEffect(() => {
-    fetch(`https://shopquest-backend.onrender.com/api/product/all-products`, {}).then(
-      (response) => {
-        response.json().then((data) => {
-          setProducts(data.data);
-          setSaleProducts(data.saleData);
-        });
-      }
-    );
+    fetch(
+      `https://shopquest-backend.onrender.com/api/product/all-products`,
+      {}
+    ).then((response) => {
+      response.json().then((data) => {
+        setProducts(data.data);
+        setSaleProducts(data.saleData);
+      });
+    });
   }, []);
   useEffect(() => {
-    fetch(`https://shopquest-backend.onrender.com/api/slider/all-slider`, {}).then(
-      (response) => {
-        response.json().then((data) => {
-          setSliders(data.data);
-        });
-      }
-    );
+    fetch(
+      `https://shopquest-backend.onrender.com/api/slider/all-slider`,
+      {}
+    ).then((response) => {
+      response.json().then((data) => {
+        setSliders(data.data);
+      });
+    });
   }, []);
   useEffect(() => {
-    fetch(`https://shopquest-backend.onrender.com/api/category/all-category`, {}).then(
-      (response) => {
-        response.json().then((data) => {
-          setCategorys(data.data);
-        });
-      }
-    );
+    fetch(
+      `https://shopquest-backend.onrender.com/api/category/all-category`,
+      {}
+    ).then((response) => {
+      response.json().then((data) => {
+        setCategorys(data.data);
+      });
+    });
   }, []);
   const addToWishList = async (getItem: any) => {
     const response = await fetch(
@@ -97,18 +100,21 @@ export default function Home() {
   };
 
   const addToCart = async (getItem: any) => {
-    const response = await fetch(`https://shopquest-backend.onrender.com/api/auth/add-to-cart`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify({
-        productID: getItem._id,
-        color: getItem.color[0],
-        size: getItem.sizes[0],
-      }),
-    });
+    const response = await fetch(
+      `https://shopquest-backend.onrender.com/api/auth/add-to-cart`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          productID: getItem._id,
+          color: getItem.color[0],
+          size: getItem.sizes[0],
+        }),
+      }
+    );
     const finalData = await response.json();
     if (finalData.success) {
       fetch("https://shopquest-backend.onrender.com/api/auth/all-cart", {

@@ -54,18 +54,21 @@ export default function MyWishList() {
   };
 
   const addToCart = async (getItem: any) => {
-    const response = await fetch(`https://shopquest-backend.onrender.com/api/auth/add-to-cart`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify({
-        productID: getItem._id,
-        color: getItem.color[0],
-        size: getItem.sizes[0],
-      }),
-    });
+    const response = await fetch(
+      `https://shopquest-backend.onrender.com/api/auth/add-to-cart`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          productID: getItem._id,
+          color: getItem.color[0],
+          size: getItem.sizes[0],
+        }),
+      }
+    );
     const finalData = await response.json();
     if (finalData.success) {
       fetch("https://shopquest-backend.onrender.com/api/auth/all-cart", {
@@ -163,7 +166,7 @@ export default function MyWishList() {
                       </div>
                       <button
                         className=" md:absolute mt-6 md:mt-0 disabled:opacity-65 disabled:pointer-events-none ml-4 md:ml-0 md:right-4 md:top-14 rounded-lg  bg-sky-600 py-2 text-white duration-300 hover:bg-sky-700 lg:px-10 px-4 "
-                        disabled={ wishList.status === "Sold" ? true : false}
+                        disabled={wishList.status === "Sold" ? true : false}
                         onClick={() => addToCart(wishList)}
                       >
                         add to cart

@@ -18,14 +18,15 @@ export default function Coupon() {
   const [allData, setallData] = useState({} as any);
 
   useEffect(() => {
-    fetch(`https://shopquest-backend.onrender.com/api/coupon/all-coupon`, {}).then(
-      (response) => {
-        response.json().then((data) => {
-          setCoupons(data.data);
-          setallData(data);
-        });
-      }
-    );
+    fetch(
+      `https://shopquest-backend.onrender.com/api/coupon/all-coupon`,
+      {}
+    ).then((response) => {
+      response.json().then((data) => {
+        setCoupons(data.data);
+        setallData(data);
+      });
+    });
   }, []);
   const count = allData?.CouponCount;
 

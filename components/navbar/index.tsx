@@ -51,9 +51,6 @@ export default function Navbar() {
     if (finalData.success) {
       fetch("https://shopquest-backend.onrender.com/api/auth/all-cart", {
         credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
       }).then((response) => {
         response.json().then((data) => {
           setCartItems(data);
@@ -68,9 +65,6 @@ export default function Navbar() {
 
   useEffect(() => {
     fetch("https://shopquest-backend.onrender.com/api/auth/all-cart", {
-        headers: {
-          "Content-Type": "application/json",
-        },
       credentials: "include",
     }).then((response) => {
       response.json().then((data) => {
@@ -81,22 +75,16 @@ export default function Navbar() {
 
   useEffect(() => {
     fetch("https://shopquest-backend.onrender.com/api/auth/all-wishlist", {
-        headers: {
-          "Content-Type": "application/json",
-        },
       credentials: "include",
     }).then((response) => {
       response.json().then((data) => {
-        setWishlist(data.data.wishlist);
+        setWishlist(data.wishlist === undefined ? null : data.data.wishlist);
       });
     });
   }, [setWishlist]);
 
   useEffect(() => {
     fetch("https://shopquest-backend.onrender.com/api/auth/profile", {
-     headers: {
-          "Content-Type": "application/json",
-        },
       credentials: "include",
     })
       .then((response) => {
@@ -126,6 +114,7 @@ export default function Navbar() {
     });
   };
 
+  console.log(cartItems);
   const cartItemsCount = cartItems.count;
   const auth = isAuthUser?.email;
   const admin = isAuthUser?.role === "admin";

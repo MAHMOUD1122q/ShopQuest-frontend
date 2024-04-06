@@ -7,13 +7,14 @@ export default function Sidebar() {
   const router = useRouter();
 
   useEffect(() => {
-    fetch(`http://localhost:4000/api/category/all-category`, {}).then(
-      (response) => {
-        response.json().then((data) => {
-          setCategorys(data.data);
-        });
-      }
-    );
+    fetch(
+      `https://shopquest-backend.onrender.com/api/category/all-category`,
+      {}
+    ).then((response) => {
+      response.json().then((data) => {
+        setCategorys(data.data);
+      });
+    });
   }, []);
 
   return (

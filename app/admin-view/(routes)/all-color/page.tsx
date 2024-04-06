@@ -19,7 +19,10 @@ export default function Colors() {
   const [allData, setallData] = useState({} as any);
 
   useEffect(() => {
-    fetch(`https://shopquest-backend.onrender.com/api/color/all-color`, {}).then((response) => {
+    fetch(
+      `https://shopquest-backend.onrender.com/api/color/all-color`,
+      {}
+    ).then((response) => {
       response.json().then((data) => {
         setColors(data.data);
         setallData(data);
@@ -46,7 +49,7 @@ export default function Colors() {
         history.go(0);
       }, 2000);
     }
-  }
+  };
   const count = allData?.ColorCount;
 
   const router = useRouter();

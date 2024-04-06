@@ -42,18 +42,21 @@ export default function ProductPage() {
   const { id } = useParams();
 
   const addToCart = async (getItem: any) => {
-    const response = await fetch(`https://shopquest-backend.onrender.com/api/auth/add-to-cart`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify({
-        productID: getItem._id,
-        color: chooseColor,
-        size: chooseSize,
-      }),
-    });
+    const response = await fetch(
+      `https://shopquest-backend.onrender.com/api/auth/add-to-cart`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          productID: getItem._id,
+          color: chooseColor,
+          size: chooseSize,
+        }),
+      }
+    );
     const finalData = await response.json();
     if (finalData.success) {
       fetch("https://shopquest-backend.onrender.com/api/auth/all-cart", {
@@ -76,18 +79,21 @@ export default function ProductPage() {
     }
   };
   const addToCartAlsoProduct = async (getItem: any) => {
-    const response = await fetch(`https://shopquest-backend.onrender.com/api/auth/add-to-cart`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify({
-        productID: getItem._id,
-        color: getItem.color[0],
-        size: getItem.sizes[0],
-      }),
-    });
+    const response = await fetch(
+      `https://shopquest-backend.onrender.com/api/auth/add-to-cart`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          productID: getItem._id,
+          color: getItem.color[0],
+          size: getItem.sizes[0],
+        }),
+      }
+    );
     const finalData = await response.json();
     if (finalData.success) {
       fetch("https://shopquest-backend.onrender.com/api/auth/all-cart", {
@@ -109,23 +115,25 @@ export default function ProductPage() {
     }
   };
   useEffect(() => {
-    fetch(`https://shopquest-backend.onrender.com/api/product/all-products`, {}).then(
-      (response) => {
-        response.json().then((data) => {
-          setProductsData(data.data);
-        });
-      }
-    );
+    fetch(
+      `https://shopquest-backend.onrender.com/api/product/all-products`,
+      {}
+    ).then((response) => {
+      response.json().then((data) => {
+        setProductsData(data.data);
+      });
+    });
   }, []);
 
   useEffect(() => {
-    fetch(`https://shopquest-backend.onrender.com/api/product/single-product?id=${id}`, {}).then(
-      (response) => {
-        response.json().then((data) => {
-          setProduct(data.data);
-        });
-      }
-    );
+    fetch(
+      `https://shopquest-backend.onrender.com/api/product/single-product?id=${id}`,
+      {}
+    ).then((response) => {
+      response.json().then((data) => {
+        setProduct(data.data);
+      });
+    });
   }, [id]);
   const createReview = async (e: any) => {
     e.preventDefault();

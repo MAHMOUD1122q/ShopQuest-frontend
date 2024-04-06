@@ -52,7 +52,6 @@ export default function Cart() {
       });
     }
   };
- 
 
   const deleteCartItem = async (id: any) => {
     const data = await fetch(

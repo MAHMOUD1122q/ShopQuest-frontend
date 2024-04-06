@@ -9,16 +9,19 @@ export default function AddColor() {
 
   const createColor = async (e: any) => {
     e.preventDefault();
-    const response = await fetch("https://shopquest-backend.onrender.com/api/color/add-color", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        label,
-        value: label
-      }),
-    });
+    const response = await fetch(
+      "https://shopquest-backend.onrender.com/api/color/add-color",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          label,
+          value: label,
+        }),
+      }
+    );
     const finalData = await response.json();
     if (finalData.success) {
       toast({
