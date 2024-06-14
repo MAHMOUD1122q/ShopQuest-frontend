@@ -1,16 +1,14 @@
 "use client";
 import { GlobalContext } from "@/context";
-import { toast } from "@/components/ui/use-toast";
-import { useEffect, useState, useContext } from "react";
+import { useContext } from "react";
 
 import { useRouter } from "next/navigation";
 
 export default function SideBar() {
-  const { cartItems, address, setAddress, setIsAuthUser, setCartItems } =
-    useContext(GlobalContext);
+  const { setIsAuthUser, setCartItems } = useContext(GlobalContext);
   const router = useRouter();
   const logout = async (e: any) => {
-    fetch("https://shopquest-backend.onrender.com/api/auth/logout", {
+    fetch("http://localhost:4000/api/auth/logout", {
       method: "POST",
       credentials: "include",
     }).then(() => {
@@ -28,35 +26,35 @@ export default function SideBar() {
           onClick={() => router.push("/my-profile")}
         >
           {" "}
-          your profie
+          حسابي
         </li>
         <li
           className=" lg:mb-4 mb-0 text-lg cursor-pointer py-2 lg:px-6 px-4 hover:bg-slate-300 duration-300"
           onClick={() => router.push("/my-profile/orders")}
         >
           {" "}
-          orders
+          طلباتي
         </li>
         <li
           className=" lg:mb-4 mb-0 text-lg cursor-pointer py-2 lg:px-6 px-4 hover:bg-slate-300 duration-300"
           onClick={() => router.push("/my-profile/my-address")}
         >
           {" "}
-          your address
+          العناوين الخاص بي
         </li>
         <li
           className=" lg:mb-4 mb-0 text-lg cursor-pointer py-2 lg:px-6 px-4 hover:bg-slate-300 duration-300"
           onClick={() => router.push("/my-profile/my-wishlist")}
         >
           {" "}
-          your wishlist
+          قائمة المفضلة
         </li>
         <li
           className="text-lg cursor-pointer py-2 lg:px-6 px-4  hover:bg-slate-300 duration-300"
           onClick={logout}
         >
           {" "}
-          logout
+          تسجيل الخروج
         </li>
       </ul>
     </div>

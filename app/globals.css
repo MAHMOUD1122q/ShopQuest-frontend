@@ -106,3 +106,7 @@
   font-size: 45px !important;
   font-weight: 800 !important;
 }
+.slide:hover {
+  transition: 0.2s;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.10);
+}

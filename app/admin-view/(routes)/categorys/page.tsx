@@ -20,19 +20,18 @@ export default function Categorys() {
   const [allData, setallData] = useState({} as any);
 
   useEffect(() => {
-    fetch(
-      `https://shopquest-backend.onrender.com/api/category/all-category`,
-      {}
-    ).then((response) => {
-      response.json().then((data) => {
-        setCategorys(data.data);
-        setallData(data);
-      });
-    });
+    fetch(`http://localhost:4000/api/category/all-category`, {}).then(
+      (response) => {
+        response.json().then((data) => {
+          setCategorys(data.data);
+          setallData(data);
+        });
+      }
+    );
   }, []);
   const deleteCategory = async (id: any) => {
     const data = await fetch(
-      `https://shopquest-backend.onrender.com/api/category/delete-category/${id}`,
+      `http://localhost:4000/api/category/delete-category/${id}`,
       {
         method: "DELETE",
         headers: {

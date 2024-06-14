@@ -1,5 +1,5 @@
 "use client";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 export default function Sidebar() {
@@ -7,24 +7,25 @@ export default function Sidebar() {
   const router = useRouter();
 
   useEffect(() => {
-    fetch(
-      `https://shopquest-backend.onrender.com/api/category/all-category`,
-      {}
-    ).then((response) => {
-      response.json().then((data) => {
-        setCategorys(data.data);
-      });
-    });
+    fetch(`http://localhost:4000/api/category/all-category`, {}).then(
+      (response) => {
+        response.json().then((data) => {
+          setCategorys(data.data);
+        });
+      }
+    );
   }, []);
 
   return (
-    <div className=" w-72 p-8 mt-20 border-[1px] rounded-lg h-fit hidden lg:inline-block mb-3">
-      <h3 className=" font-semibold text-xl mb-5">category</h3>
+    <div className=" min-w-72 p-8 mt-20 border-[1px] mx-auto md:mx-0 rounded-lg h-fit mb-3">
+      <h3 className=" font-semibold text-xl mb-5">جميع الفئات</h3>
       <ul>
         {categorys.map((category: any) => (
           <li
             className=" mb-3 flex items-center cursor-pointer hover:opacity-60 duration-500"
-            onClick={() => router.push(`/shop/${category.name}`)}
+            onClick={() =>
+              router.push(`/shop/${category.name}?category=${category.name}`)
+            }
             key={category.name}
           >
             <svg

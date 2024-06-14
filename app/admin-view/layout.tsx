@@ -9,7 +9,7 @@ export default function AdminLayout({
   return (
     <div className="flex">
       <Sidebar />
-      <div className="bg-gray-100 w-full mt-[-24px]">{children}</div>
+      <div className="bg-gray-100 w-full mt-[-70px]">{children}</div>
     </div>
   );
 }

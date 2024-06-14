@@ -2,6 +2,7 @@
 "use client";
 
 import Image from "next/image";
+
 import {
   Popover,
   PopoverContent,
@@ -19,7 +20,6 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState, useContext } from "react";
 import { GlobalContext } from "@/context";
 import { toast } from "../ui/use-toast";
-
 export default function Navbar() {
   const [focus, setFocus] = useState("opacity-100");
   const [search, setSearch] = useState("");
@@ -35,22 +35,44 @@ export default function Navbar() {
   } = useContext(GlobalContext);
 
   const router = useRouter();
+  const [nav, setNav] = useState("lg:pt-8 pt-0");
+
+  useEffect(() => {
+    const shrinkHeader = () => {
+      if (
+        document.body.scrollTop > 70 ||
+        document.documentElement.scrollTop > 70
+      ) {
+        setNav("lg:pt-4 pt-0");
+      } else {
+        setNav("lg:pt-8 pt-0");
+      }
+    };
+    window.addEventListener("scroll", shrinkHeader);
+    return () => {
+      window.removeEventListener("scroll", shrinkHeader);
+    };
+  }, []);
 
   const deleteCartItem = async (id: any) => {
     const data = await fetch(
-      `https://shopquest-backend.onrender.com/api/auth/delete-item-cart/${id}`,
+      `http://localhost:4000/api/auth/delete-item-cart/${id}`,
       {
         method: "DELETE",
         credentials: "include",
         headers: {
           "Content-Type": "application/json",
+          Authorization: "Bearer " + isAuthUser?.token,
         },
       }
     );
     const finalData = await data.json();
     if (finalData.success) {
-      fetch("https://shopquest-backend.onrender.com/api/auth/all-cart", {
+      fetch("http://localhost:4000/api/auth/all-cart", {
         credentials: "include",
+        headers: {
+          Authorization: "Bearer " + isAuthUser?.token,
+        },
       }).then((response) => {
         response.json().then((data) => {
           setCartItems(data);
@@ -64,48 +86,51 @@ export default function Navbar() {
   };
 
   useEffect(() => {
-    fetch("https://shopquest-backend.onrender.com/api/auth/all-cart", {
-      credentials: "include",
-    }).then((response) => {
-      response.json().then((data) => {
-        setCartItems(data);
-      });
-    });
-  }, [setCartItems]);
-
-  useEffect(() => {
-    fetch("https://shopquest-backend.onrender.com/api/auth/all-wishlist", {
-      credentials: "include",
-    }).then((response) => {
-      response.json().then((data) => {
-        setWishlist(data.wishlist === undefined ? null : data.data.wishlist);
-      });
-    });
-  }, [setWishlist]);
-
-  useEffect(() => {
-    fetch("https://shopquest-backend.onrender.com/api/auth/profile", {
-      credentials: "include",
-    })
-      .then((response) => {
+    try {
+      fetch("http://localhost:4000/api/auth/all-cart", {
+        credentials: "include",
+        headers: {
+          Authorization: "Bearer " + isAuthUser?.token,
+        },
+      }).then((response) => {
         response.json().then((data) => {
-          setIsAuthUser(data);
+          try {
+            setCartItems(data);
+          } catch (e) {}
         });
-      })
-      .catch((err) => {
-        console.log(err);
-        setIsAuthUser(null);
-        setCartItems(0);
-        setAddress(null);
-        setWishlist(null);
       });
-  }, []);
+    } catch (e) {
+      console.log(e);
+    }
+  }, [setCartItems, isAuthUser]);
+
+  useEffect(() => {
+    try {
+      fetch("http://localhost:4000/api/auth/all-wishlist", {
+        credentials: "include",
+        headers: {
+          Authorization: "Bearer " + isAuthUser?.token,
+        },
+      }).then((response) => {
+        response.json().then((data) => {
+          setWishlist(data.data === undefined ? null : data.data.wishlist);
+        });
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  }, [setWishlist, isAuthUser]);
+
+  useEffect(() => {
+    setIsAuthUser(JSON.parse(localStorage.getItem("userInfo") as any));
+  }, [setIsAuthUser]);
 
   const logout = async (e: any) => {
-    fetch("https://shopquest-backend.onrender.com/api/auth/logout", {
+    fetch("http://localhost:4000/api/auth/logout", {
       method: "POST",
       credentials: "include",
     }).then(() => {
+      localStorage.removeItem("userInfo");
       setIsAuthUser(null);
       setCartItems(0);
       setAddress(null);
@@ -113,16 +138,23 @@ export default function Navbar() {
       router.push("/");
     });
   };
-
-  console.log(cartItems);
   const cartItemsCount = cartItems.count;
   const auth = isAuthUser?.email;
   const admin = isAuthUser?.role === "admin";
   return (
     <>
-      <nav className=" shadow-md z-[900] fixed w-full top-0 bg-white">
-        <div className=" flex flex-wrap justify-between items-center mx-10 pt-4 pb-3 ">
-          <Image src="/ShopQuest.png" alt="logo" height={130} width={130} />
+      <nav className=" shadow-md z-[900] fixed w-full top-0 bg-white" dir="rtl">
+        <div
+          className={` flex flex-wrap justify-between items-center mx-10 ${nav} pb-3 `}
+        >
+          <Image
+            src="/Logo.png"
+            alt="logo"
+            height={130}
+            width={130}
+            className=" cursor-pointer"
+            onClick={() => router.push("/")}
+          />
           <ul className=" lg:flex flex-1 ml-16 hidden ">
             <li
               className={` mr-4 py-2 px-4 duration-300 cursor-pointer  hover:bg-sky-200/20 hover:text-sky-700 ${
@@ -130,7 +162,7 @@ export default function Navbar() {
               } rounded-md`}
               onClick={() => router.push("/")}
             >
-              Home
+              الرئيسية
             </li>
             <li
               className={`py-2 px-4 duration-300 cursor-pointer hover:bg-sky-200/20 hover:text-sky-700 ${
@@ -140,7 +172,7 @@ export default function Navbar() {
               } rounded-md`}
               onClick={() => router.push("/shop")}
             >
-              Shop
+              المتجر
             </li>
           </ul>
           <div>
@@ -169,7 +201,7 @@ export default function Navbar() {
                     type="text"
                     className="block p-2 pl-10 w-96 opacity-100 text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:pl-3"
                     name="search"
-                    placeholder="Search Here..."
+                    placeholder=" ما الذي تبحث عنه؟ "
                     onFocus={() => setFocus("opacity-0")}
                     onBlur={() => setFocus(" opacity-100")}
                     onChange={(e: any) => setSearch(e.target.value)}
@@ -180,7 +212,10 @@ export default function Navbar() {
           </div>
           <div>
             <Popover>
-              <PopoverTrigger className=" relative mr-6">
+              <PopoverTrigger
+                className=" relative mx-6"
+                onClick={() => router.push("/cart")}
+              >
                 <p className=" absolute top-[-18px] right-0 bg-sky-600 rounded-full text-white w-6 h-6 flex items-center justify-center">
                   {cartItemsCount}
                 </p>
@@ -199,17 +234,21 @@ export default function Navbar() {
                   />
                 </svg>
               </PopoverTrigger>
-              <PopoverContent className=" w-[500px] mr-4 z-[1000]">
+              {/* <PopoverContent className=" w-[500px] ml-4 z-[1000]">
                 <div className=" h-fit max-h-96 overflow-y-scroll">
                   {cartItems.data === null || cartItems.data === undefined ? (
-                    <p>the cart is empty </p>
+                    <p className=" text-center"> السله فارغة </p>
                   ) : cartItems.data.length === 0 ? (
-                    <p>the cart is empty </p>
+                    <p className=" text-center"> السله فارغة </p>
                   ) : (
                     cartItems.data.map((item: any) => (
-                      <div key={item._id} className=" flex mt-3 relative">
+                      <div
+                        key={item._id}
+                        className=" flex mt-3 relative"
+                        dir="rtl"
+                      >
                         <span
-                          className=" absolute top-0 bg-sky-600 text-white rounded-full h-6 w-6 flex justify-center items-center right-10 cursor-pointer duration-300"
+                          className=" absolute top-0 bg-sky-600 text-white rounded-full h-6 w-6 flex justify-center items-center left-2 cursor-pointer duration-300"
                           onClick={() => deleteCartItem(item._id)}
                         >
                           x
@@ -220,13 +259,13 @@ export default function Navbar() {
                           className=" w-24 h-24"
                         />
                         <div className=" mx-5">
-                          <p>name :{item.productID.name}</p>
+                          <p>{item.productID.name}</p>
                           <p>
-                            price:{" "}
+                            الاجمالي:{" "}
                             {item.productID.isSale === true
                               ? item.productID.price - item.productID.discount
-                              : item.productID.price}
-                            EGB
+                              : item.productID.price}{" "}
+                            ج.م
                           </p>
                           <p className=" flex items-center">
                             {item.color === undefined ||
@@ -234,7 +273,8 @@ export default function Navbar() {
                               <>
                                 color :{" "}
                                 <p
-                                  className={`bg-[${item.color}] w-5 h-5 rounded-full ml-2`}
+                                  className={`w-5 h-5 rounded-full ml-2`}
+                                  style={{ backgroundColor: `${item.color}` }}
                                 ></p>
                               </>
                             )}
@@ -257,12 +297,12 @@ export default function Navbar() {
                         className=" mt-5 bg-sky-600 text-white hover:bg-sky-700 duration-300 py-2 px-8"
                         onClick={() => router.push("/cart")}
                       >
-                        continue
+                        متابعة
                       </button>
                     )}
                   </div>
                 </div>
-              </PopoverContent>
+              </PopoverContent> */}
             </Popover>
             {/* <Popover>
               <PopoverTrigger>
@@ -314,7 +354,7 @@ export default function Navbar() {
                     alt="logo"
                     width={40}
                     height={40}
-                    className="ml-2"
+                    className="mr-2"
                   />
                 )}
               </PopoverTrigger>
@@ -325,20 +365,20 @@ export default function Navbar() {
                       className="mb-2 text-md font-semibold hover:pl-1 hover:bg-sky-200/20 duration-300 capitalize cursor-pointer text-sky-600 border-b-[1px] py-2"
                       onClick={() => router.push("/my-profile")}
                     >
-                      my profile
+                      حسابي
                     </li>
                     <li
                       className="text-md font-semibold hover:pl-1 hover:bg-sky-200/20 duration-300 capitalize cursor-pointer text-sky-600 py-2"
                       onClick={logout}
                     >
-                      logout
+                      تسجيل الخروج
                     </li>
                     {admin ? (
                       <li
                         className="text-md font-semibold hover:pl-1 hover:bg-sky-200/20 duration-300 capitalize cursor-pointer text-sky-600 border-t-[1px] py-2"
                         onClick={() => router.push("/admin-view")}
                       >
-                        admin
+                        الادمن
                       </li>
                     ) : null}
                   </ul>
@@ -348,13 +388,13 @@ export default function Navbar() {
                       className=" mb-2 text-md font-semibold hover:pl-1 hover:bg-sky-200/20 duration-300 capitalize cursor-pointer text-sky-600 border-b-[1px] py-2"
                       onClick={() => router.push("/login")}
                     >
-                      login
+                      تسجيل
                     </li>
                     <li
                       className="text-md font-semibold hover:pl-1 hover:bg-sky-200/20 duration-300 capitalize cursor-pointer text-sky-600 py-2"
                       onClick={() => router.push("/register")}
                     >
-                      register
+                      تسجيل الدخول
                     </li>
                   </ul>
                 )}
@@ -377,11 +417,19 @@ export default function Navbar() {
                   />
                 </svg>
               </SheetTrigger>
-              <SheetContent className="bg-white text-white z-[1000]">
+              <SheetContent
+                className="bg-white text-white z-[1200]"
+                side="left"
+              >
                 <SheetHeader>
                   <SheetTitle>
-                    <div className="logo">
-                      <h3 className="logo-grediant text-3xl"> AL JAZEERA </h3>
+                    <div className="flex justify-center items-center">
+                      <Image
+                        src="/Logo.png"
+                        alt="logo"
+                        height={130}
+                        width={130}
+                      />
                     </div>
                   </SheetTitle>
                   <SheetDescription className="flex">
@@ -411,7 +459,7 @@ export default function Navbar() {
                           } rounded-md`}
                           onClick={() => router.push("/")}
                         >
-                          Home
+                          الرئيسية
                         </li>
                         <li
                           className={`py-2 px-4 duration-300 cursor-pointer hover:bg-sky-200/20 hover:text-sky-700 ${
@@ -421,7 +469,7 @@ export default function Navbar() {
                           } rounded-md`}
                           onClick={() => router.push("/shop")}
                         >
-                          Shop
+                          المتجر
                         </li>
                       </ul>
                       <div>
@@ -452,7 +500,7 @@ export default function Navbar() {
                                 type="text"
                                 className="block p-2 pl-10 w-52 opacity-100 text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:pl-3"
                                 name="search"
-                                placeholder="Search Here..."
+                                placeholder=" ما الذي تبحث عنه؟ "
                                 onFocus={() => setFocus("opacity-0")}
                                 onBlur={() => setFocus(" opacity-100")}
                                 onChange={(e: any) => setSearch(e.target.value)}
@@ -463,22 +511,22 @@ export default function Navbar() {
                       </div>
                       <div className=" mt-5">
                         {auth ? (
-                          <ul className=" text-xl flex flex-wrap">
+                          <ul className=" text-xl flex items-center flex-wrap">
                             <li
-                              className=" mr-4 w-24"
+                              className=" mr-4"
                               onClick={() => router.push("/my-profile")}
                             >
-                              my profile
+                              حسابي
                             </li>
-                            <li className=" mr-4" onClick={logout}>
-                              logout
+                            <li className=" mr-4 w-28" onClick={logout}>
+                              تسجيل الخروج
                             </li>
                             {admin ? (
                               <li
                                 onClick={() => router.push("/admin-view")}
                                 className="mt-4 md:mt-0"
                               >
-                                admin
+                                الادمن
                               </li>
                             ) : null}
                           </ul>
@@ -488,10 +536,10 @@ export default function Navbar() {
                               className=" mr-4"
                               onClick={() => router.push("/login")}
                             >
-                              login
+                              تسجيل
                             </li>
                             <li onClick={() => router.push("/register")}>
-                              register
+                              تسجيل الدخول
                             </li>
                           </ul>
                         )}

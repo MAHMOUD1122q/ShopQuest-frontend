@@ -4,9 +4,10 @@ import { useEffect, useState, useContext } from "react";
 import { GlobalContext } from "@/context";
 import { toast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
+import ComponentLevelLoader from "@/components/Loader/componentlevel";
 
 export default function MyProfile() {
-  const { isAuthUser } = useContext(GlobalContext);
+  const { isAuthUser, pageLevelLoader, setPageLevelLoader } = useContext(GlobalContext);
 
   const username = isAuthUser?.username;
   const email = isAuthUser?.email;
@@ -16,27 +17,27 @@ export default function MyProfile() {
   };
 
   return (
+   <>
+   <title> Shopa</title>
     <div className=" border p-5 mx-3 lg:mx-0">
       <div>
-        <h3 className=" text-2xl font-semibold ">my profile</h3>
+        <h3 className=" text-2xl font-semibold "> حسابي </h3>
         <div className=" flex items-center mt-3">
           <form onSubmit={userUpdate}>
             <div className=" flex flex-wrap my-3">
               <div className=" flex items-center mb-4 w-full">
-                <img src={image} alt="" className=" w-14 h-14 mr-8 " />
+                <img src={image} alt="" className=" w-14 h-14 ml-8 " />
                 <input
                   type="file"
-                  className=" disabled:opacity-70 disabled:pointer-events-none mr-3 lg:w-96 w-60 block bg-gray-50 border py-2 mt-2 rounded-lg px-2"
-                  placeholder="username"
-                  name="username"
+                  className=" disabled:opacity-70 disabled:pointer-events-none ml-3 lg:w-96 w-60 block bg-gray-50 border py-2 mt-2 rounded-lg px-2"
                   disabled
                 />
               </div>
               <div>
-                <label htmlFor="">username</label>
+                <label htmlFor=""> اسم المستخدم </label>
                 <input
                   type="text"
-                  className=" disabled:opacity-70 disabled:pointer-events-none mr-3 lg:w-96 w-60 block bg-gray-50 border py-2 mt-2 rounded-lg px-2"
+                  className=" disabled:opacity-70 disabled:pointer-events-none ml-3 lg:w-96 w-60 block bg-gray-50 border py-2 mt-2 rounded-lg px-2"
                   placeholder="username"
                   name="username"
                   disabled
@@ -44,7 +45,7 @@ export default function MyProfile() {
                 />
               </div>
               <div>
-                <label htmlFor="">email</label>
+                <label htmlFor=""> الايميل </label>
                 <input
                   type="text"
                   className=" disabled:opacity-70 disabled:pointer-events-none lg:w-96 w-60 block bg-gray-50 border py-2 mt-2 rounded-lg px-2"
@@ -55,12 +56,13 @@ export default function MyProfile() {
                 />
               </div>
             </div>
-            <button className=" bg-sky-600 text-white py-2 px-6 rounded-lg mt-4 hover:bg-sky-700 duration-300 ">
-              update
+            <button className=" bg-sky-600 text-white py-2 px-6 rounded-lg mt-4 hover:bg-sky-700 duration-300 disabled:opacity-60 disabled:pointer-events-none" disabled>
+              تحديث
             </button>
           </form>
         </div>
       </div>
     </div>
+   </>
   );
 }

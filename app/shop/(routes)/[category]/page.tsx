@@ -3,40 +3,43 @@
 import { useContext, useEffect, useState } from "react";
 import { GlobalContext } from "@/context";
 import { toast } from "@/components/ui/use-toast";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { Heart, Star } from "lucide-react";
-
 export default function ProductByCategory() {
   const router = useRouter();
-  const [products, setProducts] = useState([]);
-  const [allData, setallData] = useState({} as any);
-  const { setIsAuthUser, isAuthUser, cartItems, setCartItems } =
-    useContext(GlobalContext);
+  const searchParams = useSearchParams();
+  const categoryParames = searchParams.get("category");
   const { category } = useParams();
-
-  const addToCart = async (getItem: any) => {
+  const [products, setProducts] = useState([]);
+  const [page, setPage] = useState(1);
+  const [pageCount, setPageCount] = useState(1);
+  const [allData, setallData] = useState({} as any);
+  const { wishlist, setWishlist, isAuthUser } = useContext(GlobalContext);
+  const addToWishList = async (getItem: any) => {
     const response = await fetch(
-      `https://shopquest-backend.onrender.com/api/auth/add-to-cart`,
+      `http://localhost:4000/api/auth/add-wishlist`,
       {
-        method: "POST",
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
+          Authorization: "Bearer " + isAuthUser?.token,
         },
         credentials: "include",
         body: JSON.stringify({
-          productID: getItem._id,
-          color: getItem.color[0],
-          size: getItem.sizes[0],
+          prodId: getItem._id,
         }),
       }
     );
     const finalData = await response.json();
     if (finalData.success) {
-      fetch("https://shopquest-backend.onrender.com/api/auth/all-cart", {
+      fetch("http://localhost:4000/api/auth/all-wishlist", {
         credentials: "include",
+        headers: {
+          Authorization: "Bearer " + isAuthUser?.token,
+        },
       }).then((response) => {
         response.json().then((data) => {
-          setCartItems(data);
+          setWishlist(data.data.wishlist);
         });
       });
       toast({
@@ -51,32 +54,48 @@ export default function ProductByCategory() {
     }
   };
   useEffect(() => {
+    fetch(`http://localhost:4000/api/auth/all-wishlist`, {
+      credentials: "include",
+      headers: {
+        Authorization: "Bearer " + isAuthUser?.token,
+      },
+    }).then((response) => {
+      response.json().then((data) => {
+        try {
+          setWishlist(data.data.wishlist);
+        } catch (e) {}
+      });
+    });
+  }, [isAuthUser, setWishlist]);
+
+  useEffect(() => {
     fetch(
-      `https://shopquest-backend.onrender.com/api/product/product-by-category/${category}`,
+      `http://localhost:4000/api/product/product-by-category/${category}?page=${page}&limit=12`,
       {}
     ).then((response) => {
       response.json().then((data) => {
         setProducts(data.data);
         setallData(data);
+        setPageCount(data.pageCount);
       });
     });
-  }, [category]);
+  }, [category, page]);
+  const pageNumbers = Array.from({ length: pageCount }, (_, i) => i + 1);
 
   const count = allData?.ProdcutCount;
-
   return (
     <>
-      <title>Shop</title>
+      <title>Shopa</title>
       <meta />
       <div className="mt-20 ml-14">
         <div className="flex items-center">
-          <h3 className=" mb-5 text-xl font-bold mx-4">All products</h3>
-          <span className="text-gray-500 mb-5">({count} products)</span>
+          <h3 className=" mb-5 text-xl font-bold mx-4"> {categoryParames}</h3>
+          <span className="text-gray-500 mb-5">({count} منتج)</span>
         </div>
-        <div className=" flex flex-wrap">
+        <div className=" flex flex-wrap" dir="ltr">
           {products.map((product: any) => (
             <>
-              <div className=" border-[1px] w-72  mx-4 cursor-pointer my-4 relative">
+              <div className=" border-[1px] w-72 mx-4 cursor-pointer my-4 relative slide">
                 {product.isSale === true ? (
                   <div className=" text-white bg-black p-2 absolute top-1 left-1 rounded-3xl font-bold ">
                     sale
@@ -97,11 +116,13 @@ export default function ProductByCategory() {
                   className=" px-6"
                   onClick={() => router.push(`/product/${product._id}`)}
                 >
-                  <h3 className=" mt-5">{product.name}</h3>
-                  <div className=" flex mt-2">
-                    <p className=" mr-2 ">
+                  <h3 className=" mt-5" dir="rtl">
+                    {product.name}
+                  </h3>
+                  <div className=" flex mt-2" dir="rtl">
+                    <p className=" ml-2 ">
                       {" "}
-                      rating : {product.rating.toFixed(1)}
+                      تقييم المنتج : {product.rating.toFixed(1)}
                     </p>
                     <Star
                       className={product.rating >= 1 ? "text-[#ffe642]" : ""}
@@ -124,30 +145,75 @@ export default function ProductByCategory() {
                       fill={product.rating === 5 ? "#ffe642" : "#fff"}
                     />
                   </div>
-                  <p className=" my-2">
-                    price:{" "}
-                    <span className=" text-slate-400 line-through ">
-                      {product.price}
-                    </span>{" "}
-                    {product.price - product.discount} EGB
+                  <p className=" my-2" dir="rtl">
+                    السعر:{" "}
+                    {product.isSale === true ? (
+                      <>
+                        <span className=" text-slate-400 line-through ">
+                          {product.price}{" "}
+                        </span>{" "}
+                        {product.price - product.discount} ج.م
+                      </>
+                    ) : (
+                      <span dir="rtl">{product.price} ج.م</span>
+                    )}
                   </p>
                 </div>
                 <div className=" flex justify-between mt-5 items-center  px-6 mb-5">
                   <button
                     className="text-white relative z-50 bg-sky-600 disabled:opacity-65 disabled:pointer-events-none py-2 px-10 rounded-md hover:bg-sky-700 duration-300"
                     disabled={product.status === "Sold" ? true : false}
-                    onClick={() => addToCart(product)}
+                    onClick={() => router.push(`/product/${product._id}`)}
                   >
-                    Add To Cart
+                    عرض المنتج
                   </button>
-                  <button className=" hover:text-red-600 duration-300 cursor-pointer ">
-                    <Heart className=" w-8 h-8" />
+                  <button
+                    className={` hover:text-red-600 duration-300 cursor-pointer ${
+                      wishlist === undefined || wishlist === null
+                        ? ""
+                        : wishlist.includes(product._id) === true
+                        ? "text-[#de2929]"
+                        : ""
+                    }`}
+                    onClick={() => addToWishList(product)}
+                  >
+                    <Heart
+                      fill={
+                        wishlist === undefined || wishlist === null
+                          ? "#fff"
+                          : wishlist.includes(product._id) === true
+                          ? "#de2929"
+                          : "#fff"
+                      }
+                      className=" w-8 h-8"
+                    />
                   </button>
                 </div>
               </div>
             </>
           ))}
         </div>
+      </div>
+      <div className=" overflow-hidden w-80 flex justify-center items-center mx-6 ">
+        {pageCount > 1 ? (
+          <>
+            <ul className="flex justify-center items-center">
+              {pageNumbers?.map((pageNumber) => (
+                <a
+                  onClick={() => setPage(pageNumber)}
+                  key={pageNumber}
+                  className={`px-3 py-2  mx-1 rounded-md border cursor-pointer ${
+                    page === pageNumber
+                      ? "bg-blue-500 text-white"
+                      : "border-gray-300 hover:bg-gray-200 duration-300 "
+                  }`}
+                >
+                  {pageNumber}
+                </a>
+              ))}
+            </ul>
+          </>
+        ) : null}
       </div>
     </>
   );

@@ -42,25 +42,26 @@ export default function ProductPage() {
   const { id } = useParams();
 
   const addToCart = async (getItem: any) => {
-    const response = await fetch(
-      `https://shopquest-backend.onrender.com/api/auth/add-to-cart`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({
-          productID: getItem._id,
-          color: chooseColor,
-          size: chooseSize,
-        }),
-      }
-    );
+    const response = await fetch(`http://localhost:4000/api/auth/add-to-cart`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + isAuthUser?.token,
+      },
+      credentials: "include",
+      body: JSON.stringify({
+        productID: getItem._id,
+        color: chooseColor,
+        size: chooseSize,
+      }),
+    });
     const finalData = await response.json();
     if (finalData.success) {
-      fetch("https://shopquest-backend.onrender.com/api/auth/all-cart", {
+      fetch("http://localhost:4000/api/auth/all-cart", {
         credentials: "include",
+        headers: {
+          Authorization: "Bearer " + isAuthUser?.token,
+        },
       }).then((response) => {
         response.json().then((data) => {
           setCartItems(data);
@@ -78,71 +79,50 @@ export default function ProductPage() {
       });
     }
   };
-  const addToCartAlsoProduct = async (getItem: any) => {
-    const response = await fetch(
-      `https://shopquest-backend.onrender.com/api/auth/add-to-cart`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({
-          productID: getItem._id,
-          color: getItem.color[0],
-          size: getItem.sizes[0],
-        }),
+  useEffect(() => {
+    fetch(`http://localhost:4000/api/auth/all-wishlist`, {
+      credentials: "include",
+      headers: {
+        Authorization: "Bearer " + isAuthUser?.token,
+      },
+    }).then((response) => {
+      response.json().then((data) => {
+        try {
+          setWishlist(data.data.wishlist);
+        } catch (e) {}
+      });
+    });
+  }, [isAuthUser, setWishlist]);
+
+  useEffect(() => {
+    fetch(`http://localhost:4000/api/product/single-product?id=${id}`, {}).then(
+      (response) => {
+        response.json().then((data) => {
+          setProduct(data.data);
+        });
       }
     );
-    const finalData = await response.json();
-    if (finalData.success) {
-      fetch("https://shopquest-backend.onrender.com/api/auth/all-cart", {
-        credentials: "include",
-      }).then((response) => {
-        response.json().then((data) => {
-          setCartItems(data);
-        });
-      });
-      toast({
-        variant: "success",
-        title: finalData.message,
-      });
-    } else {
-      toast({
-        variant: "destructive",
-        title: finalData.message,
-      });
-    }
-  };
+  }, [id]);
   useEffect(() => {
     fetch(
-      `https://shopquest-backend.onrender.com/api/product/all-products`,
+      `http://localhost:4000/api/product/product-by-category/${product.category}`,
       {}
     ).then((response) => {
       response.json().then((data) => {
         setProductsData(data.data);
       });
     });
-  }, []);
+  }, [product]);
 
-  useEffect(() => {
-    fetch(
-      `https://shopquest-backend.onrender.com/api/product/single-product?id=${id}`,
-      {}
-    ).then((response) => {
-      response.json().then((data) => {
-        setProduct(data.data);
-      });
-    });
-  }, [id]);
   const createReview = async (e: any) => {
     e.preventDefault();
     const response = await fetch(
-      `https://shopquest-backend.onrender.com/api/product/${id}/review`,
+      `http://localhost:4000/api/product/${id}/review`,
       {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
+          Authorization: "Bearer " + isAuthUser?.token,
         },
         credentials: "include",
         body: JSON.stringify({
@@ -170,11 +150,12 @@ export default function ProductPage() {
 
   const addToWishList = async (getItem: any) => {
     const response = await fetch(
-      `https://shopquest-backend.onrender.com/api/auth/add-wishlist`,
+      `http://localhost:4000/api/auth/add-wishlist`,
       {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
+          Authorization: "Bearer " + isAuthUser?.token,
         },
         credentials: "include",
         body: JSON.stringify({
@@ -184,8 +165,11 @@ export default function ProductPage() {
     );
     const finalData = await response.json();
     if (finalData.success) {
-      fetch("https://shopquest-backend.onrender.com/api/auth/all-wishlist", {
+      fetch("http://localhost:4000/api/auth/all-wishlist", {
         credentials: "include",
+        headers: {
+          Authorization: "Bearer " + isAuthUser?.token,
+        },
       }).then((response) => {
         response.json().then((data) => {
           setWishlist(data.data.wishlist);
@@ -207,8 +191,11 @@ export default function ProductPage() {
 
   return (
     <>
-      <title>ShopQuest</title>
-      <div className=" flex flex-col md:flex-row md:mx-10 mx-4 my-10 justify-between">
+      <title>Shopa</title>
+      <div
+        className=" flex flex-col md:flex-row md:mx-10 mx-4 my-10 justify-between"
+        dir="rtl"
+      >
         <div className=" basis-2/5 mb-4 md:mb-0">
           {product.images === undefined ? (
             <p></p>
@@ -221,7 +208,7 @@ export default function ProductPage() {
                   ? product.images[0]
                   : sliderImage
               }
-              className=" w-full h-80 border border-sky-600"
+              className=" w-full lg:w-[700px] h-80 lg:h-[400px] border border-sky-600"
             />
           )}
           <div>
@@ -256,11 +243,11 @@ export default function ProductPage() {
           </span>
           <h3 className=" text-xl font-bold mb-2">{product.name}</h3>
           {product.sku === undefined || "" ? null : (
-            <p className="mb-2">code: {product.sku}</p>
+            <p className="mb-2">كود المنتج: {product.sku}</p>
           )}
           <p className=" flex ">
             {" "}
-            price:{" "}
+            السعر:{" "}
             {product.isSale === true ? (
               <p className="text-slate-400 line-through  mx-2">
                 {product.price}
@@ -269,7 +256,7 @@ export default function ProductPage() {
             {product.isSale === true
               ? product.price - product.discount
               : product.price}{" "}
-            EGB
+            ج.م
           </p>
           {product.color === undefined ? (
             <p>{""}</p>
@@ -279,7 +266,7 @@ export default function ProductPage() {
                 {product.color.length === 0 ||
                 product.color === undefined ? null : (
                   <>
-                    <p className=" mr-2">choose color : </p>
+                    <p className=" ml-2">اختيار اللون : </p>
                     {
                       <>
                         {product.color.map((color: any) => (
@@ -290,16 +277,19 @@ export default function ProductPage() {
                                   chooseColor === color
                                     ? "opacity-80 border-[3px]"
                                     : ""
-                                } list-none bg-[${color}] p-1 border mr-2 border-sky-600 rounded-full h-6 w-6`}
+                                } list-none p-1 border ml-2 border-sky-600 rounded-full h-6 w-6`}
+                                style={{ backgroundColor: `${color}` }}
                                 onClick={() => setChooseColor(color)}
                               />
                             </div>
                           </>
                         ))}
-                        <p className=" text-sm text-red-500">
-                          {" "}
-                          must choose color
-                        </p>
+                        {chooseColor === "" ? (
+                          <p className=" text-sm text-red-500">
+                            {" "}
+                            يجب اخيار لون
+                          </p>
+                        ) : null}
                       </>
                     }
                   </>
@@ -313,7 +303,7 @@ export default function ProductPage() {
             <div className=" flex mt-2">
               {product.sizes.length === 0 ||
               product.sizes === undefined ? null : (
-                <p className=" mr-2">choose size :</p>
+                <p className=" ml-2">اختيار مقاس :</p>
               )}
               {product.sizes.length === 0 ||
               product.sizes === undefined ? null : (
@@ -326,7 +316,7 @@ export default function ProductPage() {
                             chooseSize === size
                               ? "opacity-80 text-sky-600 "
                               : ""
-                          } p-2 border mr-2 flex justify-center items-center border-sky-600 rounded-full h-7 w-7 cursor-pointer `}
+                          } p-2 border ml-2 flex justify-center items-center border-sky-600 rounded-full h-7 w-7 cursor-pointer `}
                           onClick={() => setChooseSize(size)}
                         >
                           {size}
@@ -334,16 +324,18 @@ export default function ProductPage() {
                       </div>
                     </div>
                   ))}
-                  <p className=" text-sm text-red-500"> must choose size</p>
+                  {chooseSize === "" ? (
+                    <p className=" text-sm text-red-500"> يجب اختيار مقاس</p>
+                  ) : null}
                 </>
               )}
             </div>
           )}
           <div className="">
             <div className=" flex mt-2">
-              <p className=" mr-2">
+              <p className=" ml-2">
                 {" "}
-                rating :{" "}
+                تقيم المنتج :{" "}
                 {product.rating === undefined
                   ? null
                   : product.rating.toFixed(1)}
@@ -370,9 +362,9 @@ export default function ProductPage() {
               />
             </div>
             {product.numReviews === 0 ? (
-              <p className=" mt-2">noRating(0)</p>
+              <p className=" mt-2">عدد التقيمات:(0)</p>
             ) : (
-              <p className=" mt-2">number of rating :({product.numReviews})</p>
+              <p className=" mt-2"> عدد التقيمات :({product.numReviews})</p>
             )}
           </div>
           <button
@@ -400,7 +392,7 @@ export default function ProductPage() {
             className=" disabled:opacity-65 disabled:pointer-events-none capitalize py-2 px-16 rounded-xl bg-sky-600 hover:bg-sky-700 duration-300 font-semibold  text-white  mt-5 "
             onClick={() => addToCart(product)}
           >
-            add to cart
+            اضافة الي السلة
           </button>
           <div className=" flex mt-6 items-center justify-between">
             <div
@@ -423,7 +415,7 @@ export default function ProductPage() {
                     : "#fff"
                 }
               />
-              <p className=" ml-2 capitalize">add to wishlist</p>
+              <p className=" mr-2 capitalize"> اضافة الي قائمة المفضلة </p>
             </div>
             <div>
               {auth ? (
@@ -431,17 +423,17 @@ export default function ProductPage() {
                   <DialogTrigger>
                     <p className=" flex w-fit capitalize rounded-xl border border-sky-600 hover:bg-sky-600 hover:text-white cursor-pointer duration-300  py-2 px-4 ">
                       <Star fill="#ffe642" className=" mr-2 text-[#ffe642]" />{" "}
-                      add review
+                      اضافة تقييم
                     </p>
                   </DialogTrigger>
                   <DialogContent>
                     <DialogHeader>
-                      <DialogTitle>add review</DialogTitle>
+                      <DialogTitle> اضافة تقييم </DialogTitle>
                       <DialogDescription>
                         <form onSubmit={createReview}>
                           <div className=" mx-4">
                             <div>
-                              <p className=" capitalize "> add rating</p>
+                              <p className=" capitalize "> اضافة تقييم </p>
                               <div className=" flex my-2">
                                 <Star
                                   className=" flex w-8 h-8 text-[#ffe642]"
@@ -471,12 +463,12 @@ export default function ProductPage() {
                               </div>
                             </div>
                             <textarea
-                              placeholder=" add comment for this product"
+                              placeholder=" اضافة تعليق علي المنتج "
                               className=" h-64 bg-gray-100 w-full my-4 p-2 resize-none"
                               onChange={(e: any) => setComment(e.target.value)}
                             />
                             <button className=" flex w-fit capitalize rounded-xl border border-sky-600 hover:bg-sky-600 hover:text-white cursor-pointer duration-300  py-2 px-8 ">
-                              add review
+                              اضافة تقييم
                             </button>
                           </div>
                         </form>
@@ -489,15 +481,15 @@ export default function ProductPage() {
                   className=" flex w-fit mt-2 capitalize rounded-xl border border-sky-600 hover:bg-sky-600 hover:text-white cursor-pointer duration-300  py-2 px-4 "
                   onClick={() => router.push("/login")}
                 >
-                  <Star fill="#ffe642" className=" mr-2 text-[#ffe642]" /> add
-                  review
+                  <Star fill="#ffe642" className=" mr-2 text-[#ffe642]" /> اضافة
+                  تقييم
                 </p>
               )}
             </div>
           </div>
         </div>
       </div>
-      <div className="md:mx-20 mx-4">
+      <div className="md:mx-20 mx-4" dir="rtl">
         <div className=" flex mt-8 bg-slate-200 p-4 ">
           {" "}
           <p
@@ -509,7 +501,7 @@ export default function ProductPage() {
             onClick={() => setCommentField(false)}
           >
             {" "}
-            Description
+            وصف المنتج
           </p>{" "}
           <p
             className={`cursor-pointer hover:opacity-60 p-2 duration-500 ${
@@ -519,7 +511,7 @@ export default function ProductPage() {
             }`}
             onClick={() => setCommentField(true)}
           >
-            Comments
+            التعليقات والتقييمات
           </p>
         </div>
         {commentField === false ? (
@@ -527,69 +519,73 @@ export default function ProductPage() {
             {product.description}
           </div>
         ) : (
-          <div className=" p-4 mt-3 w-full flex justify-between flex-wrap">
-            {product.reviews.map((review: any) => (
-              <>
-                <div className=" lg:basis-[32%] md:basis-[40%] border bg-gray-100 p-6 shadow-lg my-3">
-                  <div className=" flex items-center mb-4">
-                    <img
-                      src={review.img}
-                      alt="img"
-                      className=" w-10 h-10 mr-4"
-                    />
-                    <div>
-                      <p className=" mr-2 ">{review.name}</p>
-                      <p>
-                        posted on :{" "}
-                        {format(
-                          review.createdAt === undefined
-                            ? null
-                            : review.createdAt,
-                          "yyyy-MM-dd"
-                        )}
+          <div className=" p-4 mt-3 w-full flex gap-5 flex-wrap">
+            {product.reviews.length === 0 ? (
+              <p> لا يوجد تعليقات علي المنتج </p>
+            ) : (
+              product.reviews.map((review: any) => (
+                <>
+                  <div className=" lg:basis-[32%] md:basis-[40%] border bg-gray-100 p-6 shadow-lg my-3">
+                    <div className=" flex items-center mb-4">
+                      <img
+                        src={review.img}
+                        alt="img"
+                        className=" w-10 h-10 mr-4"
+                      />
+                      <div>
+                        <p className=" mr-2 ">{review.name}</p>
+                        <p>
+                          تم التعليق في :{" "}
+                          {format(
+                            review.createdAt === undefined
+                              ? null
+                              : review.createdAt,
+                            "yyyy-MM-dd"
+                          )}
+                        </p>
+                      </div>
+                    </div>
+                    <div className=" flex">
+                      <Star
+                        className={review.rating >= 1 ? "text-[#ffe642]" : ""}
+                        fill={review.rating >= 1 ? "#ffe642" : "#fff"}
+                      />
+                      <Star
+                        className={review.rating >= 2 ? "text-[#ffe642]" : ""}
+                        fill={review.rating >= 2 ? "#ffe642" : "#fff"}
+                      />
+                      <Star
+                        className={review.rating >= 3 ? "text-[#ffe642]" : ""}
+                        fill={review.rating >= 3 ? "#ffe642" : "#fff"}
+                      />
+                      <Star
+                        className={review.rating >= 4 ? "text-[#ffe642]" : ""}
+                        fill={review.rating >= 4 ? "#ffe642" : "#fff"}
+                      />
+                      <Star
+                        className={review.rating === 5 ? "text-[#ffe642]" : ""}
+                        fill={review.rating === 5 ? "#ffe642" : "#fff"}
+                      />
+                      <p className=" mr-2 text-[#ffd749] text-bold text-lg">
+                        {review.rating}
                       </p>
                     </div>
+                    <div className=" mt-3 w-full">{review.comment}</div>
                   </div>
-                  <div className=" flex">
-                    <Star
-                      className={review.rating >= 1 ? "text-[#ffe642]" : ""}
-                      fill={review.rating >= 1 ? "#ffe642" : "#fff"}
-                    />
-                    <Star
-                      className={review.rating >= 2 ? "text-[#ffe642]" : ""}
-                      fill={review.rating >= 2 ? "#ffe642" : "#fff"}
-                    />
-                    <Star
-                      className={review.rating >= 3 ? "text-[#ffe642]" : ""}
-                      fill={review.rating >= 3 ? "#ffe642" : "#fff"}
-                    />
-                    <Star
-                      className={review.rating >= 4 ? "text-[#ffe642]" : ""}
-                      fill={review.rating >= 4 ? "#ffe642" : "#fff"}
-                    />
-                    <Star
-                      className={review.rating === 5 ? "text-[#ffe642]" : ""}
-                      fill={review.rating === 5 ? "#ffe642" : "#fff"}
-                    />
-                    <p className=" ml-2 text-[#ffd749] text-bold text-lg">
-                      {review.rating}
-                    </p>
-                  </div>
-                  <div className=" mt-3 w-full">{review.comment}</div>
-                </div>
-              </>
-            ))}
+                </>
+              ))
+            )}
           </div>
         )}
       </div>
       <div className="mx-5 lg:mx-20 mt-10">
-        <div className="flex justify-between ">
-          <h3 className="mb-10 font-semibold text-xl">Sale</h3>
+        <div className="flex justify-between " dir="rtl">
+          <h3 className="mb-10 font-semibold text-xl">منتجات مشابهة</h3>
           <p
-            className=" cursor-pointer hover:text-sky-600 duration-300"
+            className="cursor-pointer hover:text-sky-700 text-xl duration-300 text-sky-600"
             onClick={() => router.push("/shop")}
           >
-            Show All
+            عرض الكل
           </p>
         </div>
         <Swiper
@@ -609,13 +605,12 @@ export default function ProductPage() {
           }}
           spaceBetween={30}
           grabCursor={true}
-          navigation={true}
-          modules={[Navigation, Autoplay]}
+          modules={[Autoplay]}
           className="mySwiper"
         >
           {productsData.map((product: any) => (
             <>
-              <SwiperSlide className=" border-[1px]  mx-4 cursor-pointer my-4 relative">
+              <SwiperSlide className=" border-[1px]  cursor-pointer my-4 relative">
                 {product.isSale === true ? (
                   <div className=" text-white bg-black p-2 absolute top-1 left-1 rounded-3xl font-bold ">
                     sale
@@ -636,11 +631,13 @@ export default function ProductPage() {
                   className=" px-6"
                   onClick={() => router.push(`/product/${product._id}`)}
                 >
-                  <h3 className=" mt-5">{product.name}</h3>
-                  <div className=" flex mt-2">
-                    <p className=" mr-2 ">
+                  <h3 className=" mt-5" dir="rtl">
+                    {product.name}
+                  </h3>
+                  <div className=" flex mt-2" dir="rtl">
+                    <p className=" ml-2 ">
                       {" "}
-                      rating : {product.rating.toFixed(1)}
+                      تقيم المنتج : {product.rating.toFixed(1)}
                     </p>
                     <Star
                       className={product.rating >= 1 ? "text-[#ffe642]" : ""}
@@ -663,17 +660,17 @@ export default function ProductPage() {
                       fill={product.rating === 5 ? "#ffe642" : "#fff"}
                     />
                   </div>
-                  <p className=" my-2">
-                    price:{" "}
+                  <p className=" my-2" dir="rtl">
+                    السعر:{" "}
                     {product.isSale === true ? (
                       <>
                         <span className=" text-slate-400 line-through ">
                           {product.price}{" "}
                         </span>{" "}
-                        {product.price - product.discount} EGB
+                        {product.price - product.discount} ج.م
                       </>
                     ) : (
-                      <span>{product.price} </span>
+                      <span dir="rtl">{product.price} ج.م</span>
                     )}
                   </p>
                 </div>
@@ -681,9 +678,9 @@ export default function ProductPage() {
                   <button
                     className="text-white relative z-50 disabled:opacity-65 disabled:pointer-events-none bg-sky-600 py-2 px-10 rounded-md hover:bg-sky-700 duration-300"
                     disabled={product.status === "Sold" ? true : false}
-                    onClick={() => addToCartAlsoProduct(product)}
+                    onClick={() => router.push(`/product/${product._id}`)}
                   >
-                    Add To Cart
+                    عرض المنتج
                   </button>
                   <button
                     className={` hover:text-red-600 duration-300 cursor-pointer ${

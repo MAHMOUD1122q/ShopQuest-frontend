@@ -19,18 +19,16 @@ export default function Sizes() {
   const [allData, setallData] = useState({} as any);
 
   useEffect(() => {
-    fetch(`https://shopquest-backend.onrender.com/api/size/all-size`, {}).then(
-      (response) => {
-        response.json().then((data) => {
-          setSizes(data.data);
-          setallData(data);
-        });
-      }
-    );
+    fetch(`http://localhost:4000/api/size/all-size`, {}).then((response) => {
+      response.json().then((data) => {
+        setSizes(data.data);
+        setallData(data);
+      });
+    });
   }, []);
   const deleteSize = async (id: any) => {
     const data = await fetch(
-      `https://shopquest-backend.onrender.com/api/size/delete-size/${id}`,
+      `http://localhost:4000/api/size/delete-size/${id}`,
       {
         method: "DELETE",
         headers: {

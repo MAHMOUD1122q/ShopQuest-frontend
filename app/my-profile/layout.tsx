@@ -6,7 +6,7 @@ export default function ProfileLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className=" flex flex-col lg:flex-row">
+    <div className=" flex flex-col lg:flex-row" dir="rtl">
     <SideBar/>
     <main className=" basis-2/3">{children}</main>
     </div>

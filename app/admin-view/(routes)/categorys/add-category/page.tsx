@@ -15,7 +15,7 @@ export default function AddCategory() {
     formData.append("image", image);
     formData.append("name", name);
     const response = await fetch(
-      "https://shopquest-backend.onrender.com/api/category/add-category",
+      "http://localhost:4000/api/category/add-category",
       {
         method: "POST",
         body: formData,

@@ -35,6 +35,7 @@ export default function Product() {
   const [status, setStatus] = useState("");
   const [isShow, setIsShow] = useState(true as any);
   const [isSale, setIsSale] = useState(false as any);
+  const [feature, setFeature] = useState(false as any);
   const [discount, setDiscount] = useState(0 as any);
   const [images, setImages] = useState([] as any);
   const [imagesPreview, setImagesPreview] = useState([] as any);
@@ -48,22 +49,18 @@ export default function Product() {
   const [categorysData, setCategorysData] = useState([]);
 
   useEffect(() => {
-    fetch(
-      `https://shopquest-backend.onrender.com/api/category/all-category`,
-      {}
-    ).then((response) => {
-      response.json().then((data) => {
-        setCategorysData(data.data);
-      });
-    });
+    fetch(`http://localhost:4000/api/category/all-category`, {}).then(
+      (response) => {
+        response.json().then((data) => {
+          setCategorysData(data.data);
+        });
+      }
+    );
   }, []);
   const [colorsData, setColorsData] = useState([]);
 
   useEffect(() => {
-    fetch(
-      `https://shopquest-backend.onrender.com/api/color/all-color`,
-      {}
-    ).then((response) => {
+    fetch(`http://localhost:4000/api/color/all-color`, {}).then((response) => {
       response.json().then((data) => {
         setColorsData(data.data);
       });
@@ -72,13 +69,11 @@ export default function Product() {
   const [sizesData, setSizesData] = useState([]);
 
   useEffect(() => {
-    fetch(`https://shopquest-backend.onrender.com/api/size/all-size`, {}).then(
-      (response) => {
-        response.json().then((data) => {
-          setSizesData(data.data);
-        });
-      }
-    );
+    fetch(`http://localhost:4000/api/size/all-size`, {}).then((response) => {
+      response.json().then((data) => {
+        setSizesData(data.data);
+      });
+    });
   }, []);
 
   useEffect(() => {
@@ -103,6 +98,7 @@ export default function Product() {
     fd.set("sku", sku);
     fd.set("category", category);
     fd.set("description", description);
+    fd.set("feature", feature);
     fd.set("status", status);
     for (var x = 0; x < colors.length; x++) {
       fd.append("color", colors[x]);
@@ -117,7 +113,7 @@ export default function Product() {
       fd.append("images", images[x]);
     }
     const response = await fetch(
-      "https://shopquest-backend.onrender.com/api/product/add-product",
+      "http://localhost:4000/api/product/add-product",
       {
         method: "POST",
         body: fd,
@@ -245,6 +241,9 @@ export default function Product() {
                                   <option
                                     value={color.label}
                                     className="p-2 border-b-[1px] hover:bg-slate-200 duration-300 selection:bg-slate-400 "
+                                    style={{
+                                      backgroundColor: `${color.label}`,
+                                    }}
                                   >
                                     {color.label}
                                   </option>
@@ -291,6 +290,17 @@ export default function Product() {
                     <SelectItem value="default">default</SelectItem>
                   </SelectContent>
                 </Select>
+                {/*  */}
+                <input
+                  type="checkbox"
+                  className=" mr-2 w-5 h-5 my-5"
+                  checked={feature === true}
+                  onChange={(e: any) => setFeature(e.target.checked)}
+                />
+                <label htmlFor="" className=" mr-2">
+                  feature
+                </label>
+                {/*  */}
                 {/*  */}
                 <input
                   type="checkbox"

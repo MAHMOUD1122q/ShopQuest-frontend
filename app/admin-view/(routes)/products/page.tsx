@@ -21,19 +21,18 @@ export default function Products() {
   const [products, setProducts] = useState([]);
   const [allData, setallData] = useState({} as any);
   useEffect(() => {
-    fetch(
-      `https://shopquest-backend.onrender.com/api/product/all-products-admin`,
-      {}
-    ).then((response) => {
-      response.json().then((data) => {
-        setProducts(data.data);
-        setallData(data);
-      });
-    });
+    fetch(`http://localhost:4000/api/product/all-products-admin`, {}).then(
+      (response) => {
+        response.json().then((data) => {
+          setProducts(data.data);
+          setallData(data);
+        });
+      }
+    );
   }, []);
   const deleteProduct = async (id: any) => {
     const data = await fetch(
-      `https://shopquest-backend.onrender.com/api/product/delete-product/${id}`,
+      `http://localhost:4000/api/product/delete-product/${id}`,
       {
         method: "DELETE",
         headers: {
@@ -54,7 +53,6 @@ export default function Products() {
   };
   const router = useRouter();
   const count = allData?.ProdcutCount;
-  console.log(products);
   return (
     <>
       <title>Products</title>
@@ -82,6 +80,7 @@ export default function Products() {
               <TableHead>Status</TableHead>
               <TableHead>show</TableHead>
               <TableHead>sale</TableHead>
+              <TableHead>feature</TableHead>
               <TableHead>discount</TableHead>
               <TableHead className="text-right">Action</TableHead>
             </TableRow>
@@ -112,6 +111,9 @@ export default function Products() {
                   <TableCell>
                     {product.isSale === false ? "not sale" : "sale"}
                   </TableCell>
+                  <TableCell>
+                    {product.feature === false ? "no" : "yes"}
+                  </TableCell>
                   <TableCell>{product.discount}</TableCell>
                   <TableCell className="text-right">
                     {" "}
@@ -120,6 +122,11 @@ export default function Products() {
                         fill="#854d0e"
                         fillOpacity="0.3"
                         className=" text-yellow-800 h-7 w-7 bg-white border-[1px] p-[5px] mr-2 cursor-pointer"
+                        onClick={() =>
+                          router.push(
+                            `/admin-view/products/update-product/${product._id}`
+                          )
+                        }
                       />
                       <Trash
                         fill="#b91c1c"

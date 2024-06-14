@@ -1,5 +1,6 @@
 "use client";
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
 
 export const GlobalContext = createContext(null as any);
 
@@ -8,13 +9,19 @@ export default function GlobalState({ children }: { children: any }) {
   const [cartItems, setCartItems] = useState([]);
   const [address, setAddress] = useState([]);
   const [wishlist, setWishlist] = useState([]);
-
-  const [componentLevelLoader, setComponentLevelLoader] = useState({
-    loading: false,
-    id: "",
-  });
-  const [isAuthUser, setIsAuthUser] = useState({});
+  const [isAuthUser, setIsAuthUser] = useState({} as any);
   const [currentUpdatedProduct, setCurrentUpdatedProduct] = useState(null);
+  const pathName = usePathname();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (pathName.includes("admin-view")) {
+      if (isAuthUser?.role !== "admin") {
+        router.push("/unauthorized-page");
+      }
+    }
+  }, [ pathName ,isAuthUser, router]);
+
   return (
     <GlobalContext.Provider
       value={{
@@ -28,8 +35,6 @@ export default function GlobalState({ children }: { children: any }) {
         setCartItems,
         isAuthUser,
         setIsAuthUser,
-        componentLevelLoader,
-        setComponentLevelLoader,
         currentUpdatedProduct,
         setCurrentUpdatedProduct,
       }}

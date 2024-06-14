@@ -7,7 +7,7 @@ export default function ProductsLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex lg:ml-10">
+    <div className="flex flex-col md:flex-row md:mr-10" dir="rtl">
       <Sidebar />
       <div>{children}</div>
     </div>

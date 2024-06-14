@@ -19,10 +19,7 @@ export default function Colors() {
   const [allData, setallData] = useState({} as any);
 
   useEffect(() => {
-    fetch(
-      `https://shopquest-backend.onrender.com/api/color/all-color`,
-      {}
-    ).then((response) => {
+    fetch(`http://localhost:4000/api/color/all-color`, {}).then((response) => {
       response.json().then((data) => {
         setColors(data.data);
         setallData(data);
@@ -31,7 +28,7 @@ export default function Colors() {
   }, []);
   const deleteColor = async (id: any) => {
     const data = await fetch(
-      `https://shopquest-backend.onrender.com/api/color/delete-color/${id}`,
+      `http://localhost:4000/api/color/delete-color/${id}`,
       {
         method: "DELETE",
         headers: {
@@ -83,7 +80,8 @@ export default function Colors() {
                   <TableCell>{color.label}</TableCell>
                   <TableCell className="text-center flex justify-center items-center">
                     <div
-                      className={`bg-[${color.label}] h-8 w-8 rounded-full z-50`}
+                      className={`h-8 w-8 rounded-full z-50`}
+                      style={{ backgroundColor: `${color.label}` }}
                     />
                   </TableCell>
                   <TableCell className="text-right">
